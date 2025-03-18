@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オラクルカード</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        #card-container {
+            margin: 20px auto;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.5s ease-in-out;
+        }
+        #card-container img {
+            width: 80%;
+            border-radius: 8px;
+        }
+        #card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #shuffle-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #shuffle-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>オラクルカード</h1>
+    <div id="card-container">
+        <img id="card-image" src="" alt="カードの画像">
+        <div id="card-title"></div>
+    </div>
+    <button id="shuffle-btn">シャッフル</button>
+
+    <script>
+        const cards = [
+            { title: "The Sun", image: "sun.jpg" },
+            { title: "The Moon", image: "moon.jpg" },
+            { title: "The Star", image: "star.jpg" },
+            { title: "The Tower", image: "tower.jpg" }
+        ];
+
+        function shuffleCard() {
+            const randomIndex = Math.floor(Math.random() * cards.length);
+            const selectedCard = cards[randomIndex];
+            document.getElementById("card-container").style.transform = "rotateY(180deg)";
+            setTimeout(() => {
+                document.getElementById("card-image").src = selectedCard.image;
+                document.getElementById("card-title").textContent = selectedCard.title;
+                document.getElementById("card-container").style.transform = "rotateY(0deg)";
+            }, 500);
+        }
+
+        document.getElementById("shuffle-btn").addEventListener("click", shuffleCard);
+    </script>
+</body>
+</html>
