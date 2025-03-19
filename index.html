@@ -15,32 +15,33 @@
     h1 {
       margin-top: 20px;
     }
-    /* 横スクロール用ラッパー */
+    /* 横スクロール用ラッパー：スマホでもカード全体が見える */
     .scroll-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       width: 100%;
+      margin: 0 auto;
     }
-    /* カードコンテナ：4枚の場合は幅800px、将来的には枚数に合わせて調整 */
+    /* カードコンテナ：ここでは4枚用に幅800px、高さ450pxに設定 */
     .card-container {
       width: 800px;
-      height: 350px;
+      height: 450px;
       margin: 20px auto;
       position: relative;
       perspective: 1000px;
+      display: none; /* 「カードを選ぶ」ボタンクリック時に表示 */
     }
     /* 各カード（deck-card）のスタイル：サイズ200px×300px */
     .deck-card {
       width: 200px;
       height: 300px;
       position: absolute;
-      left: 0; /* 初期状態はすべて重なっている */
+      left: 0; /* 初期状態は全て重なっている */
       transition: left 1.5s ease, transform 1.5s ease, opacity 1.5s ease;
       cursor: pointer;
       transform-style: preserve-3d;
       z-index: 1;
     }
-    /* カード内部の2面 */
     .deck-card .card-face {
       width: 100%;
       height: 100%;
@@ -63,7 +64,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    /* メッセージのスタイル（中央に表示） */
+    /* メッセージ（カードの意味）のスタイル（中央表示） */
     .message {
       margin-top: 20px;
       font-size: 18px;
@@ -75,7 +76,7 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    /* 「選びなおす」ボタン（中央に表示） */
+    /* ボタンのスタイル */
     button {
       background-color: #007bff;
       color: white;
@@ -95,10 +96,13 @@
 </head>
 <body>
   <h1>オラクルカード</h1>
+  <!-- 初期TOP画面：カードを選ぶボタン -->
+  <button id="chooseButton">カードを選ぶ</button>
+  
   <!-- 横スクロール用ラッパー -->
   <div class="scroll-wrapper">
     <div class="card-container" id="cardContainer">
-      <!-- 4枚のカードを重ねた状態で配置（初期状態はすべて left:0 ） -->
+      <!-- 4枚のカードを重ねた状態（初期は left:0 ） -->
       <div class="deck-card" data-index="0" style="left: 0px;">
         <div class="card-face card-back">
           <img src="back1.jpg" alt="カード裏面">
@@ -133,8 +137,10 @@
       </div>
     </div>
   </div>
+  <!-- メッセージ（カードの意味） -->
   <div id="cardMessage" class="message"></div>
-  <button id="rechooseButton" style="display: none;">選びなおす</button>
+  <!-- 選んだ後に表示される再シャッフルボタン -->
+  <button id="rechooseButton" style="display: none;">再シャッフル</button>
 
   <script>
     // 表面に使うカード画像とその意味のデータ
@@ -155,10 +161,15 @@
       });
     }
 
-    // ページ読み込み時に、ゆっくり広がるアニメーションを開始（1秒後）
-    window.onload = function() {
+    // 「カードを選ぶ」ボタンの動作
+    document.getElementById("chooseButton").addEventListener("click", function() {
+      // ボタン非表示
+      this.style.display = "none";
+      // カードコンテナを表示
+      document.getElementById("cardContainer").style.display = "block";
+      // ゆっくり広がるアニメーション開始（1秒後）
       setTimeout(spreadDeck, 1000);
-    };
+    });
 
     // カード選択時の動作
     const deckCards = document.querySelectorAll('.deck-card');
@@ -175,13 +186,14 @@
         const frontImg = this.querySelector('.card-front img');
         frontImg.src = randomFront;
 
-        // 選んだカードを大きくポップアップさせ、中央に配置する
-        // カードコンテナは幅800px、高さ350pxなので、中央は left:300px, top:25px （カードサイズ200×300の場合）
+        // 選んだカードを大きくポップアップさせ、画面中央に配置する
+        // (カードコンテナ 800x450 の中央は left: (800-200*1.5)/2, top: (450-300*1.5)/2 )
+        // 200*1.5 = 300, 450-300 = 150, 150/2 = 75; (800-300)=500, 500/2=250.
         this.style.transition = "transform 0.6s ease, left 0.6s ease, top 0.6s ease";
         this.style.transform = "rotateY(180deg) scale(1.5)";
-        this.style.left = "300px";
-        this.style.top = "25px";
-        this.style.zIndex = "999"; // 前面に表示
+        this.style.left = "250px";
+        this.style.top = "75px";
+        this.style.zIndex = "999";
 
         // 選ばれなかったカードは縮小してフェードアウト
         deckCards.forEach(c => {
@@ -192,7 +204,7 @@
           }
         });
 
-        // 0.6秒後に、カードの意味を表示し、「選びなおす」ボタンを出す
+        // 0.6秒後にカードの意味と「再シャッフル」ボタンを表示
         setTimeout(() => {
           document.getElementById("cardMessage").textContent = cards[randomFront];
           document.getElementById("cardMessage").style.display = "block";
@@ -201,7 +213,7 @@
       });
     });
 
-    // 「選びなおす」ボタンの動作（リセット処理）
+    // 「再シャッフル」ボタンの動作（リセット処理）
     document.getElementById("rechooseButton").addEventListener("click", function() {
       // メッセージとボタンを非表示にする
       document.getElementById("cardMessage").style.display = "none";
@@ -209,14 +221,14 @@
       // すべてのカードをリセット：フリップ解除、front画像クリア、クリック有効化
       const deckCards = document.querySelectorAll('.deck-card');
       deckCards.forEach(card => {
-        card.style.transition = "all 1.5s ease"; // ゆっくりリセット
+        card.style.transition = "all 1.5s ease";
         const frontImg = card.querySelector('.card-front img');
         frontImg.src = "";
         card.style.transform = "rotateY(0deg) scale(1)";
         card.style.top = "0px";
         card.style.opacity = "1";
         card.style.pointerEvents = "auto";
-        // 初期状態に戻す（重なった状態：left:0）
+        // 初期状態に戻す（重なった状態）
         card.style.left = "0px";
         card.style.zIndex = "1";
       });
