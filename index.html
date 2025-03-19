@@ -20,7 +20,7 @@
       position: relative;
       perspective: 1000px;
     }
-    /* メインカード */
+    /* メインカード（回転して表面表示） */
     .card {
       width: 100%;
       height: 100%;
@@ -29,7 +29,6 @@
       transition: transform 1s ease-in-out;
       z-index: 1;
     }
-    /* flip（裏面→表面）の効果と上に浮かび上がる */
     .card.flip {
       transform: rotateY(180deg) translateY(-30px);
     }
@@ -38,8 +37,10 @@
       height: 100%;
       position: absolute;
       backface-visibility: hidden;
+      top: 0;
+      left: 0;
     }
-    /* 表面は最初隠しておく */
+    /* 表側は最初に隠しておく */
     .card .front {
       transform: rotateY(180deg);
     }
@@ -50,14 +51,14 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    /* デッキ（シャッフル用）のスタイル */
+    /* デッキ：シャッフル効果用の裏面カードたち */
     .deck {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 2; /* メインカードより上 */
+      z-index: 2;
     }
     .deck-card {
       position: absolute;
@@ -66,17 +67,7 @@
       left: 5%;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      opacity: 1;
-    }
-    /* 「切る」ようなアニメーション（バウンド＆移動） */
-    @keyframes deckShuffle {
-      0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
-      50% { opacity: 1; transform: translate(15px, -15px) rotate(5deg); }
-      100% { opacity: 0; transform: translate(-30px, 30px) rotate(-10deg); }
-    }
-    /* 各デッキカードに animate クラスを付与するとアニメーション開始 */
-    .deck-card.animate {
-      animation: deckShuffle 0.8s ease forwards;
+      transition: transform 0.8s ease;
     }
     .message {
       margin-top: 20px;
@@ -85,10 +76,9 @@
       color: #333;
       padding: 10px;
       background-color: #fff;
-      display: inline-block;
+      display: none;
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      display: none;
     }
     button {
       background-color: #007bff;
@@ -106,7 +96,7 @@
 <body>
   <h1>オラクルカード</h1>
   <div class="card-container">
-    <!-- メインカード（回転して表面が表示される） -->
+    <!-- メインカード：回転して表面表示 -->
     <div class="card" id="card">
       <div class="card-face back">
         <img id="mainBack" src="back1.jpg" alt="カード裏面">
@@ -115,7 +105,7 @@
         <img id="cardFront" src="" alt="カード表面">
       </div>
     </div>
-    <!-- シャッフル用のデッキ（複数の裏面カード） -->
+    <!-- デッキ：シャッフル用裏面カードの集合 -->
     <div class="deck" id="deck">
       <img class="deck-card" src="back1.jpg" alt="デッキカード1">
       <img class="deck-card" src="back2.jpg" alt="デッキカード2">
@@ -141,30 +131,36 @@
       const deck = document.getElementById("deck");
       const deckCards = document.querySelectorAll(".deck-card");
 
-      // メッセージを非表示にし、メインカードを裏面状態に戻す
+      // 初期状態：メッセージ非表示、メインカードを裏面状態に戻し、デッキ表示
       cardMessage.style.display = "none";
       cardElement.classList.remove("flip");
-      // デッキを表示
       deck.style.display = "block";
 
-      // 各デッキカードに animate クラスを付与して、順次アニメーション開始（ランダムな動きを再現）
-      deckCards.forEach((deckCard, index) => {
-        deckCard.classList.remove("animate"); // 初期状態にリセット
-        setTimeout(() => {
-          deckCard.classList.add("animate");
-        }, index * 100); // 各カードに0.1秒ずつ遅延を与える
+      // 各デッキカードをランダムにシャッフル：位置と角度を個別に設定
+      deckCards.forEach(deckCard => {
+        let randomX = Math.floor(Math.random() * 81) - 40;  // -40px～40px
+        let randomY = Math.floor(Math.random() * 81) - 40;  // -40px～40px
+        let randomAngle = Math.floor(Math.random() * 31) - 15; // -15deg～15deg
+        deckCard.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomAngle}deg)`;
       });
 
-      // 1秒後（アニメーション終了後）に、デッキを非表示にし、メインカードを反転させる
+      // 約0.8秒後に、デッキカードを元の位置に戻す
+      setTimeout(() => {
+        deckCards.forEach(deckCard => {
+          deckCard.style.transform = "translate(0, 0) rotate(0deg)";
+        });
+      }, 800);
+
+      // 約1秒後に、デッキを非表示にしてメインカードを回転させる
       setTimeout(() => {
         deck.style.display = "none";
         // 表面のカード画像をランダムに選ぶ
         const cardKeys = Object.keys(cards);
         const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
         cardFront.src = randomFront;
-        // メインカードを回転＆上に浮かび上がるように表示
+        // メインカードを回転＆上に浮かび上がる効果を付ける
         cardElement.classList.add("flip");
-        // 回転後にメッセージを表示（1秒後）
+        // さらに1秒後にメッセージを表示
         setTimeout(() => {
           cardMessage.textContent = cards[randomFront];
           cardMessage.style.display = "block";
