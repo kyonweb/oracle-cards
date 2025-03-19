@@ -1,133 +1,133 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>オラクルカード</title>
-   <style>
-       body {
-           font-family: Arial, sans-serif;
-           text-align: center;
-           background-color: #f8f8f8;
-       }
-       h1 { margin-top: 20px; }
-       .card-container {
-           width: 300px;
-           height: 400px;
-           margin: 20px auto;
-           position: relative;
-           perspective: 1000px;
-       }
-       .card {
-           width: 100%;
-           height: 100%;
-           position: absolute;
-           transform-style: preserve-3d;
-           transition: transform 1s ease-in-out;
-       }
-       /* 回転して表面を表示 */
-       .card.flip { transform: rotateY(180deg); }
-       .card .card-face {
-           width: 100%;
-           height: 100%;
-           position: absolute;
-           backface-visibility: hidden;
-       }
-       /* 表面は裏面側に隠す */
-       .card .front { transform: rotateY(180deg); }
-       .card img {
-           width: 100%;
-           height: 100%;
-           display: block;
-           border-radius: 10px;
-           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-       }
-       .message {
-           margin-top: 20px;
-           font-size: 18px;
-           font-weight: bold;
-           color: #333;
-           padding: 10px;
-           background-color: #fff;
-           display: inline-block;
-           border-radius: 5px;
-           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-           display: none;
-       }
-       button {
-           background-color: #007bff;
-           color: white;
-           border: none;
-           padding: 10px 20px;
-           margin-top: 20px;
-           font-size: 16px;
-           border-radius: 5px;
-           cursor: pointer;
-       }
-       button:hover { background-color: #0056b3; }
-   </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>オラクルカード</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f8f8f8;
+    }
+    h1 { margin-top: 20px; }
+    .card-container {
+      width: 300px;
+      height: 400px;
+      margin: 20px auto;
+      position: relative;
+      perspective: 1000px;
+    }
+    .card {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 1s ease-in-out;
+    }
+    /* カードが回転して表面を表示 */
+    .card.flip { transform: rotateY(180deg); }
+    .card .card-face {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      backface-visibility: hidden;
+    }
+    /* 表側は裏面側に隠す */
+    .card .front { transform: rotateY(180deg); }
+    .card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      padding: 10px;
+      background-color: #fff;
+      display: inline-block;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #0056b3; }
+  </style>
 </head>
 <body>
-   <h1>オラクルカード</h1>
-   <div class="card-container">
-      <div class="card" id="card">
-         <div class="card-face back">
-            <img id="backImage" src="back1.jpg" alt="カードの裏面">
-         </div>
-         <div class="card-face front">
-            <img id="frontImage" src="" alt="カードの表面">
-         </div>
+  <h1>オラクルカード</h1>
+  <div class="card-container">
+    <div class="card" id="card">
+      <div class="card-face back">
+        <img id="backImage" src="back1.jpg" alt="カードの裏面">
       </div>
-   </div>
-   <div id="cardMessage" class="message"></div>
-   <button onclick="shuffleCard()">シャッフル</button>
-   <script>
-       // 表面のカード画像とメッセージ
-       const cards = {
-           "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
-           "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
-           "star.jpg": "願いが叶う時。ポジティブなエネルギーがあなたを包みます。",
-           "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
-       };
-       // 複数の裏面画像（back1～back4）
-       const backImages = ["back1.jpg", "back2.jpg", "back3.jpg", "back4.jpg"];
+      <div class="card-face front">
+        <img id="frontImage" src="" alt="カードの表面">
+      </div>
+    </div>
+  </div>
+  <div id="cardMessage" class="message"></div>
+  <button onclick="shuffleCard()">シャッフル</button>
+  <script>
+    // 表面のカード画像と意味
+    const cards = {
+      "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
+      "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
+      "star.jpg": "願いが叶う時。ポジティブなエネルギーがあなたを包みます。",
+      "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
+    };
+    // 複数の裏面画像（back1～back4）
+    const backImages = ["back1.jpg", "back2.jpg", "back3.jpg", "back4.jpg"];
 
-       function shuffleCard() {
-           const cardElement = document.getElementById("card");
-           const backImage = document.getElementById("backImage");
-           const frontImage = document.getElementById("frontImage");
-           const cardMessage = document.getElementById("cardMessage");
+    function shuffleCard() {
+      const cardElement = document.getElementById("card");
+      const backImage = document.getElementById("backImage");
+      const frontImage = document.getElementById("frontImage");
+      const cardMessage = document.getElementById("cardMessage");
 
-           // メッセージを非表示＆カードを裏面状態に戻す
-           cardMessage.style.display = "none";
-           cardElement.classList.remove("flip");
+      // メッセージを非表示＆カードを裏面状態に戻す
+      cardMessage.style.display = "none";
+      cardElement.classList.remove("flip");
 
-           let shuffleCount = 0;
-           const maxShuffleCount = 4; // 裏面のシャッフル回数
+      let shuffleCount = 0;
+      const maxShuffleCount = 10; // 裏面のシャッフル回数を増加
 
-           // 裏面画像をランダムに切り替え（300ms ごと）
-           const interval = setInterval(() => {
-               const randomBack = backImages[Math.floor(Math.random() * backImages.length)];
-               backImage.src = randomBack;
-               shuffleCount++;
-               if (shuffleCount >= maxShuffleCount) {
-                   clearInterval(interval);
-                   // シャッフル終了後、表面のカードをランダムに選択
-                   const cardKeys = Object.keys(cards);
-                   const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
-                   frontImage.src = randomFront;
-                   // 少し待ってからカードを回転して表面を表示
-                   setTimeout(() => {
-                       cardElement.classList.add("flip");
-                       // 回転後にメッセージを表示
-                       setTimeout(() => {
-                           cardMessage.textContent = cards[randomFront];
-                           cardMessage.style.display = "block";
-                       }, 1000);
-                   }, 200);
-               }
-           }, 300);
-       }
-   </script>
+      // 裏面画像をランダムに切り替え（300ms ごと）
+      const interval = setInterval(() => {
+        const randomBack = backImages[Math.floor(Math.random() * backImages.length)];
+        backImage.src = randomBack;
+        shuffleCount++;
+        if (shuffleCount >= maxShuffleCount) {
+          clearInterval(interval);
+          // シャッフル終了後、表面のカード画像をランダムに選択
+          const cardKeys = Object.keys(cards);
+          const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
+          frontImage.src = randomFront;
+          // 少し待ってからカードを回転して表面を表示
+          setTimeout(() => {
+            cardElement.classList.add("flip");
+            // 回転後にメッセージを表示
+            setTimeout(() => {
+              cardMessage.textContent = cards[randomFront];
+              cardMessage.style.display = "block";
+            }, 1000);
+          }, 300);
+        }
+      }, 300);
+    }
+  </script>
 </body>
 </html>
