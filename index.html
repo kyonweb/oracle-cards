@@ -1,81 +1,78 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>オラクルカード</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        #card-container {
-            margin: 20px auto;
-            width: 300px;
-            height: 400px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.5s ease-in-out;
-        }
-        #card-container img {
-            width: 80%;
-            border-radius: 8px;
-        }
-        #card-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        #shuffle-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #shuffle-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>オラクルカード</title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1561.61">
+  <style type="text/css">
+    body {background-color: #f4f4f4}
+    span.s1 {font-kerning: none}
+  </style>
 </head>
 <body>
-    <h1>オラクルカード</h1>
-    <div id="card-container">
-        <img id="card-image" src="" alt="カードの画像">
-        <div id="card-title"></div>
-    </div>
-    <button id="shuffle-btn">シャッフル</button>
-
-    <script>
-        const cards = [
-            { title: "The Sun", image: "sun.jpg" },
-            { title: "The Moon", image: "moon.jpg" },
-            { title: "The Star", image: "star.jpg" },
-            { title: "The Tower", image: "tower.jpg" }
-        ];
-
-        function shuffleCard() {
-            const randomIndex = Math.floor(Math.random() * cards.length);
-            const selectedCard = cards[randomIndex];
-            document.getElementById("card-container").style.transform = "rotateY(180deg)";
-            setTimeout(() => {
-                document.getElementById("card-image").src = selectedCard.image;
-                document.getElementById("card-title").textContent = selectedCard.title;
-                document.getElementById("card-container").style.transform = "rotateY(0deg)";
-            }, 500);
-        }
-
-        document.getElementById("shuffle-btn").addEventListener("click", shuffleCard);
-    </script>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;!DOCTYPE html&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;html lang="ja"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;head&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;title&gt;オラクルカード&lt;/title&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;style&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>body {</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>text-align: center;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>font-family: Arial, sans-serif;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>background-color: #f4f4f4;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>}</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>.card-container {</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>width: 300px;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>height: 400px;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>margin: 20px auto;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>background-color: white;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>border-radius: 10px;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>display: flex;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>justify-content: center;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>align-items: center;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>overflow: hidden;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>}</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>img {</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>width: 100%;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>height: 100%;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>object-fit: cover;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>}</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>button {</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>padding: 10px 20px;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>font-size: 18px;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>background-color: royalblue;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>color: white;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>border: none;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>cursor: pointer;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>border-radius: 5px;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>}</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/style&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/head&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;body&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000; min-height: 36.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;h1&gt;オラクルカード&lt;/h1&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;div class="card-container"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>&lt;img id="cardImage" src="" alt="カードの画像"&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/div&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;button onclick="shuffleCard()"&gt;シャッフル&lt;/button&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000; min-height: 36.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;script&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>const cardImages = ["sun.jpg", "moon.jpg", "star.jpg", "tower.jpg"];</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000; min-height: 36.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>function shuffleCard() {</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>const randomIndex = Math.floor(Math.random() * cardImages.length);</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">            </span>document.getElementById("cardImage").src = cardImages[randomIndex];</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>}</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000; min-height: 36.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>// ページを開いたときにランダムなカードを表示する</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>window.onload = shuffleCard;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>&lt;/script&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000; min-height: 36.0px"><span class="s1"><b></b></span><br></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/body&gt;</b></span></h1>
+<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; text-align: center; line-height: 28.0px; font: 24.0px 'Hiragino Sans'; color: #000000; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/html&gt;</b></span></h1>
 </body>
 </html>
