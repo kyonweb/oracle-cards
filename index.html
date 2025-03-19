@@ -24,18 +24,21 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            transition: transform 1s ease-in-out, top 0.3s ease-in-out;
             transform-style: preserve-3d;
-            top: 0;
+            transition: transform 1s ease-in-out;
         }
         .card.shuffle {
             animation: shuffleAnimation 0.6s ease-in-out;
         }
+        .card.flip {
+            transform: rotateY(180deg);
+        }
         @keyframes shuffleAnimation {
             0% { transform: rotateY(0deg) translateX(0); }
-            25% { transform: rotateY(0deg) translateX(-10px); }
-            50% { transform: rotateY(0deg) translateX(10px); }
-            75% { transform: rotateY(0deg) translateX(-5px); }
+            20% { transform: rotateY(10deg) translateX(-10px); }
+            40% { transform: rotateY(-10deg) translateX(10px); }
+            60% { transform: rotateY(5deg) translateX(-5px); }
+            80% { transform: rotateY(-5deg) translateX(5px); }
             100% { transform: rotateY(0deg) translateX(0); }
         }
         .card .card-face {
@@ -116,24 +119,20 @@
             const card = document.getElementById("card");
             const frontImage = document.getElementById("frontImage");
 
-            // シャッフルアニメーションを追加
+            // ① シャッフルアニメーションを追加
             card.classList.add("shuffle");
 
             setTimeout(() => {
-                // シャッフルが終わったらカードを反転
+                // ② シャッフルが終わったら回転アニメーションを追加
                 frontImage.src = selectedCard;
-                card.style.transform = "rotateY(180deg)";
+                card.classList.remove("shuffle");
+                card.classList.add("flip");
 
-                // メッセージ表示
+                // ③ メッセージ表示
                 setTimeout(() => {
                     document.getElementById("cardMessage").textContent = cards[selectedCard];
                     document.getElementById("cardMessage").style.display = "block";
                 }, 1000);
-
-                // シャッフルクラスを削除（次回シャッフルのため）
-                setTimeout(() => {
-                    card.classList.remove("shuffle");
-                }, 600);
             }, 600);
         }
     </script>
