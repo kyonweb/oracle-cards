@@ -17,18 +17,22 @@
             width: 300px;
             height: 400px;
             margin: 20px auto;
-            background-color: white;
+            position: relative;
+            perspective: 1000px; /* 3D効果 */
+        }
+        .card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            transition: transform 0.8s ease-in-out;
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            display: block;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .card-container img {
-            max-width: 100%;
-            max-height: 100%;
-            display: block;
         }
         .message {
             margin-top: 20px;
@@ -62,7 +66,9 @@
     <h1>オラクルカード</h1>
 
     <div class="card-container">
-        <img id="cardImage" src="back.jpg" alt="カードの裏面">
+        <div class="card" id="card">
+            <img id="cardImage" src="back.jpg" alt="カードの裏面">
+        </div>
     </div>
 
     <div id="cardMessage" class="message"></div>
@@ -72,10 +78,10 @@
     <script>
         // 画像リストとメッセージ
         const cards = {
-            "sun.jpg": "太陽のカードです。希望と光の象徴。あなたの未来は明るい！",
-            "moon.jpg": "つきのカードです。直感を信じてください。答えはあなたの中にあります。",
-            "star.jpg": "ほしのカードです。願いが叶う時。ポジティブなエネルギーを受け取って！",
-            "tower.jpg": "塔のカードです。大きな変化が訪れるかもしれませんが、それは新しい始まりです！"
+            "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
+            "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
+            "star.jpg": "願いが叶う時。ポジティブなエネルギーを受け取って！",
+            "tower.jpg": "大きな変化が訪れるかもしれませんが、それは新しい始まりです！"
         };
 
         function shuffleCard() {
@@ -83,9 +89,18 @@
             const randomIndex = Math.floor(Math.random() * keys.length);
             const selectedCard = keys[randomIndex];
 
-            document.getElementById("cardImage").src = selectedCard;
-            document.getElementById("cardMessage").textContent = cards[selectedCard];
-            document.getElementById("cardMessage").style.display = "block"; // メッセージを表示
+            const card = document.getElementById("card");
+            const cardImage = document.getElementById("cardImage");
+
+            // カードを回転
+            card.style.transform = "rotateY(180deg)";
+
+            // 少し遅れて画像を変更（アニメーションを自然に見せるため）
+            setTimeout(() => {
+                cardImage.src = selectedCard;
+                document.getElementById("cardMessage").textContent = cards[selectedCard];
+                document.getElementById("cardMessage").style.display = "block"; // メッセージを表示
+            }, 400); // 0.4秒後に画像変更（回転の途中）
         }
     </script>
 
