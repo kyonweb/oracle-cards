@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オラクルカード</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f8f8;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .card-container {
+            width: 300px;
+            height: 400px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .card-container img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            padding: 10px;
+            background-color: #fff;
+            display: inline-block;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: none; /* 最初は非表示 */
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>オラクルカード</h1>
+
+    <div class="card-container">
+        <img id="cardImage" src="back.jpg" alt="カードの裏面">
+    </div>
+
+    <div id="cardMessage" class="message"></div>
+
+    <button onclick="shuffleCard()">シャッフル</button>
+
+    <script>
+        // 画像リストとメッセージ
+        const cards = {
+            "sun.jpg": "太陽のカードです。希望と光の象徴。あなたの未来は明るい！",
+            "moon.jpg": "つきのカードです。直感を信じてください。答えはあなたの中にあります。",
+            "star.jpg": "ほしのカードです。願いが叶う時。ポジティブなエネルギーを受け取って！",
+            "tower.jpg": "塔のカードです。大きな変化が訪れるかもしれませんが、それは新しい始まりです！"
+        };
+
+        function shuffleCard() {
+            const keys = Object.keys(cards);
+            const randomIndex = Math.floor(Math.random() * keys.length);
+            const selectedCard = keys[randomIndex];
+
+            document.getElementById("cardImage").src = selectedCard;
+            document.getElementById("cardMessage").textContent = cards[selectedCard];
+            document.getElementById("cardMessage").style.display = "block"; // メッセージを表示
+        }
+    </script>
+
+</body>
+</html>
