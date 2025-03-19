@@ -24,8 +24,17 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            backface-visibility: hidden;
-            transition: transform 0.8s ease-in-out;
+            transition: transform 1s ease-in-out;
+            transform-style: preserve-3d; /* 3Dを維持 */
+        }
+        .card .card-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden; /* 背面の要素を隠す */
+        }
+        .card .front {
+            transform: rotateY(180deg);
         }
         .card img {
             width: 100%;
@@ -67,7 +76,12 @@
 
     <div class="card-container">
         <div class="card" id="card">
-            <img id="cardImage" src="back.jpg" alt="カードの裏面">
+            <div class="card-face back">
+                <img id="backImage" src="back.jpg" alt="カードの裏面">
+            </div>
+            <div class="card-face front">
+                <img id="frontImage" src="" alt="カードの表面">
+            </div>
         </div>
     </div>
 
@@ -90,17 +104,19 @@
             const selectedCard = keys[randomIndex];
 
             const card = document.getElementById("card");
-            const cardImage = document.getElementById("cardImage");
+            const frontImage = document.getElementById("frontImage");
 
-            // カードを回転
+            // カードの表面の画像をセット（シャッフル後に見えるように）
+            frontImage.src = selectedCard;
+
+            // カードを回転して表にする
             card.style.transform = "rotateY(180deg)";
 
-            // 少し遅れて画像を変更（アニメーションを自然に見せるため）
+            // メッセージ表示
             setTimeout(() => {
-                cardImage.src = selectedCard;
                 document.getElementById("cardMessage").textContent = cards[selectedCard];
-                document.getElementById("cardMessage").style.display = "block"; // メッセージを表示
-            }, 400); // 0.4秒後に画像変更（回転の途中）
+                document.getElementById("cardMessage").style.display = "block";
+            }, 1000); // 回転後に表示
         }
     </script>
 
