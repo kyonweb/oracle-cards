@@ -15,25 +15,25 @@
     h1 {
       margin-top: 20px;
     }
-    /* カードコンテナ：横に広がるアニメーション用の領域 */
+    /* カードコンテナ：十分な横幅・高さに設定 */
     .card-container {
-      width: 400px;
-      height: 150px;
+      width: 600px;
+      height: 250px;
       margin: 20px auto;
       position: relative;
       overflow: hidden;
     }
-    /* 各カード（deck-card）のスタイル */
+    /* 各カード（deck-card）のスタイル：サイズ大きく設定 */
     .deck-card {
-      width: 80px;
-      height: 120px;
+      width: 150px;
+      height: 225px;
       position: absolute;
-      left: 0; /* 初期状態は重なっている */
-      transition: left 0.6s ease, transform 0.6s ease;
+      left: 0; /* 初期状態は全て重なっている */
+      transition: left 1s ease, transform 1s ease, opacity 1s ease;
       cursor: pointer;
       transform-style: preserve-3d;
     }
-    /* 内部の2面 */
+    /* カード内部の2面 */
     .deck-card .card-face {
       width: 100%;
       height: 100%;
@@ -45,7 +45,7 @@
     }
     /* 裏面：初期状態で表示 */
     .deck-card .card-back { }
-    /* 表面：初期状態は隠すために180deg回転 */
+    /* 表面：初期状態は180deg回転で隠す */
     .deck-card .card-front {
       transform: rotateY(180deg);
     }
@@ -56,7 +56,7 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    /* メッセージ */
+    /* メッセージのスタイル */
     .message {
       margin-top: 20px;
       font-size: 18px;
@@ -68,7 +68,7 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    /* ボタン（選びなおす）は下に配置 */
+    /* 「選びなおす」ボタン：カードコンテナの下に配置 */
     button {
       background-color: #007bff;
       color: white;
@@ -78,6 +78,8 @@
       font-size: 16px;
       border-radius: 5px;
       cursor: pointer;
+      position: relative;
+      z-index: 10;
     }
     button:hover {
       background-color: #0056b3;
@@ -133,20 +135,19 @@
       "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
     };
 
-    // カードを広げる関数（各カードを横方向にアニメーションで広げる）
+    // カードを横にゆっくり広げる関数
     function spreadDeck() {
       const deckCards = document.querySelectorAll('.deck-card');
-      // 4枚の場合の目標位置（例：左からそれぞれ10px, 110px, 210px, 310px）
+      // 均等に配置：コンテナ幅600px、カード幅150px → 左: 0, 150, 300, 450px
       deckCards.forEach((card, index) => {
-        let targetLeft = 10 + index * 100;
+        let targetLeft = 150 * index;
         card.style.left = targetLeft + "px";
       });
     }
 
-    // ページ読み込み時に広がるアニメーションを実行
+    // ページ読み込み時に、ゆっくり広がるアニメーションを開始（800ms後）
     window.onload = function() {
-      // 少し待ってから広げる
-      setTimeout(spreadDeck, 300);
+      setTimeout(spreadDeck, 800);
     };
 
     // カード選択時の動作
@@ -161,15 +162,13 @@
         // 選択されたカードの front 画像を設定
         const frontImg = this.querySelector('.card-front img');
         frontImg.src = randomFront;
-        // 選択されたカードをフリップして上に浮かび上がらせる
-        this.style.transition = "transform 0.6s ease, top 0.6s ease";
+        // 選択されたカードをフリップして上に浮かび上がる（サイズはそのまま）
+        this.style.transition = "transform 0.6s ease";
         this.style.transform = "rotateY(180deg)";
-        this.style.top = "-30px";
-        // 0.6秒後にメッセージを表示
+        // 0.6秒後にカードの意味を表示し、「選びなおす」ボタンを出す
         setTimeout(() => {
           document.getElementById("cardMessage").textContent = cards[randomFront];
           document.getElementById("cardMessage").style.display = "block";
-          // 「選びなおす」ボタンを表示
           document.getElementById("rechooseButton").style.display = "inline-block";
         }, 600);
       });
@@ -180,22 +179,20 @@
       // メッセージとボタンを非表示にする
       document.getElementById("cardMessage").style.display = "none";
       this.style.display = "none";
-      // すべてのカードをリセット（フリップ解除、front画像をクリア、クリック有効化）
+      // すべてのカードをリセット（フリップ解除、front画像クリア、クリック有効化）
       const deckCards = document.querySelectorAll('.deck-card');
       deckCards.forEach(card => {
         card.style.transition = "none";
-        card.classList.remove("flip"); // クラス削除（もし使用していれば）
-        // front側の画像をクリア
+        card.classList.remove("flip"); // フリップ状態解除（もし使用していれば）
         const frontImg = card.querySelector('.card-front img');
         frontImg.src = "";
         card.style.transform = "rotateY(0deg)";
-        card.style.top = "0px";
         card.style.pointerEvents = "auto";
-        // 初期状態（重なった状態）に戻す
+        // 初期状態に戻す（重なった状態：left:0）
         card.style.left = "0px";
       });
-      // 少し待ってから再度広げる
-      setTimeout(spreadDeck, 300);
+      // 少し待ってから再度ゆっくり広げる（800ms後）
+      setTimeout(spreadDeck, 800);
     });
   </script>
 </body>
