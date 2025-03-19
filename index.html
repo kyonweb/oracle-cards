@@ -9,6 +9,8 @@
       font-family: Arial, sans-serif;
       text-align: center;
       background-color: #f8f8f8;
+      margin: 0;
+      padding: 20px;
     }
     h1 { margin-top: 20px; }
     .card-container {
@@ -18,19 +20,18 @@
       position: relative;
       perspective: 1000px;
     }
+    /* メインカード */
     .card {
       width: 100%;
       height: 100%;
       position: absolute;
       transform-style: preserve-3d;
       transition: transform 1s ease-in-out;
+      z-index: 1;
     }
-    /* カードが回転して上に浮かび上がる（flip + float を同時に適用） */
-    .card.flip.float {
-      transform: rotateY(180deg) translateY(-30px);
-    }
+    /* flip（裏面→表面）の効果と上に浮かび上がる */
     .card.flip {
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) translateY(-30px);
     }
     .card .card-face {
       width: 100%;
@@ -38,14 +39,7 @@
       position: absolute;
       backface-visibility: hidden;
     }
-    .card .back, .card .front {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    /* 表側は最初に隠す */
+    /* 表面は最初隠しておく */
     .card .front {
       transform: rotateY(180deg);
     }
@@ -54,26 +48,35 @@
       height: 100%;
       display: block;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    /* 裏面の各カード */
-    .backFace {
+    /* デッキ（シャッフル用）のスタイル */
+    .deck {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: 2; /* メインカードより上 */
     }
-    /* 裏面カードの「切る」アニメーション */
-    @keyframes cutAnimation {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(-20px, -10px) rotate(-5deg); }
-      50% { transform: translate(20px, 10px) rotate(5deg); }
-      75% { transform: translate(-10px, -5px) rotate(-3deg); }
-      100% { transform: translate(0, 0) rotate(0deg); }
+    .deck-card {
+      position: absolute;
+      width: 90%;
+      top: 5%;
+      left: 5%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      opacity: 1;
     }
-    .backFace.cut {
-      animation: cutAnimation 1s ease;
+    /* 「切る」ようなアニメーション（バウンド＆移動） */
+    @keyframes deckShuffle {
+      0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+      50% { opacity: 1; transform: translate(15px, -15px) rotate(5deg); }
+      100% { opacity: 0; transform: translate(-30px, 30px) rotate(-10deg); }
+    }
+    /* 各デッキカードに animate クラスを付与するとアニメーション開始 */
+    .deck-card.animate {
+      animation: deckShuffle 0.8s ease forwards;
     }
     .message {
       margin-top: 20px;
@@ -84,7 +87,7 @@
       background-color: #fff;
       display: inline-block;
       border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
       display: none;
     }
     button {
@@ -103,16 +106,21 @@
 <body>
   <h1>オラクルカード</h1>
   <div class="card-container">
+    <!-- メインカード（回転して表面が表示される） -->
     <div class="card" id="card">
-      <div class="card-face back" id="backFaces">
-        <img class="backFace" src="back1.jpg" alt="カード裏面1">
-        <img class="backFace" src="back2.jpg" alt="カード裏面2">
-        <img class="backFace" src="back3.jpg" alt="カード裏面3">
-        <img class="backFace" src="back4.jpg" alt="カード裏面4">
+      <div class="card-face back">
+        <img id="mainBack" src="back1.jpg" alt="カード裏面">
       </div>
       <div class="card-face front">
-        <img id="frontImage" src="" alt="カードの表面">
+        <img id="cardFront" src="" alt="カード表面">
       </div>
+    </div>
+    <!-- シャッフル用のデッキ（複数の裏面カード） -->
+    <div class="deck" id="deck">
+      <img class="deck-card" src="back1.jpg" alt="デッキカード1">
+      <img class="deck-card" src="back2.jpg" alt="デッキカード2">
+      <img class="deck-card" src="back3.jpg" alt="デッキカード3">
+      <img class="deck-card" src="back4.jpg" alt="デッキカード4">
     </div>
   </div>
   <div id="cardMessage" class="message"></div>
@@ -128,39 +136,40 @@
 
     function shuffleCard() {
       const cardElement = document.getElementById("card");
-      const frontImage = document.getElementById("frontImage");
+      const cardFront = document.getElementById("cardFront");
       const cardMessage = document.getElementById("cardMessage");
-      const backFaces = document.querySelectorAll(".backFace");
+      const deck = document.getElementById("deck");
+      const deckCards = document.querySelectorAll(".deck-card");
 
-      // メッセージを非表示、カードを裏面状態に戻す
+      // メッセージを非表示にし、メインカードを裏面状態に戻す
       cardMessage.style.display = "none";
-      cardElement.classList.remove("flip", "float");
+      cardElement.classList.remove("flip");
+      // デッキを表示
+      deck.style.display = "block";
 
-      // 裏面の4枚すべてに cut アニメーションを追加
-      backFaces.forEach(face => {
-        face.classList.add("cut");
+      // 各デッキカードに animate クラスを付与して、順次アニメーション開始（ランダムな動きを再現）
+      deckCards.forEach((deckCard, index) => {
+        deckCard.classList.remove("animate"); // 初期状態にリセット
+        setTimeout(() => {
+          deckCard.classList.add("animate");
+        }, index * 100); // 各カードに0.1秒ずつ遅延を与える
       });
 
-      // 1秒後、cut アニメーションを終了して裏面のアニメーションを止める
+      // 1秒後（アニメーション終了後）に、デッキを非表示にし、メインカードを反転させる
       setTimeout(() => {
-        backFaces.forEach(face => {
-          face.classList.remove("cut");
-        });
-
+        deck.style.display = "none";
         // 表面のカード画像をランダムに選ぶ
         const cardKeys = Object.keys(cards);
         const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
-        frontImage.src = randomFront;
-
-        // カード全体に flip と float の効果を追加し、裏面から表面にめくる＆上に浮かび上がる
-        cardElement.classList.add("flip", "float");
-
-        // 1秒後にメッセージを表示
+        cardFront.src = randomFront;
+        // メインカードを回転＆上に浮かび上がるように表示
+        cardElement.classList.add("flip");
+        // 回転後にメッセージを表示（1秒後）
         setTimeout(() => {
           cardMessage.textContent = cards[randomFront];
           cardMessage.style.display = "block";
         }, 1000);
-      }, 1000); // 裏面カットアニメーションの時間
+      }, 1000);
     }
   </script>
 </body>
