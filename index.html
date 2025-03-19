@@ -25,22 +25,55 @@
       transform-style: preserve-3d;
       transition: transform 1s ease-in-out;
     }
-    /* カードが回転して表面を表示 */
-    .card.flip { transform: rotateY(180deg); }
+    /* カードが回転して上に浮かび上がる（flip + float を同時に適用） */
+    .card.flip.float {
+      transform: rotateY(180deg) translateY(-30px);
+    }
+    .card.flip {
+      transform: rotateY(180deg);
+    }
     .card .card-face {
       width: 100%;
       height: 100%;
       position: absolute;
       backface-visibility: hidden;
     }
-    /* 表側は裏面側に隠す */
-    .card .front { transform: rotateY(180deg); }
+    .card .back, .card .front {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    /* 表側は最初に隠す */
+    .card .front {
+      transform: rotateY(180deg);
+    }
     .card img {
       width: 100%;
       height: 100%;
       display: block;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    /* 裏面の各カード */
+    .backFace {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    /* 裏面カードの「切る」アニメーション */
+    @keyframes cutAnimation {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-20px, -10px) rotate(-5deg); }
+      50% { transform: translate(20px, 10px) rotate(5deg); }
+      75% { transform: translate(-10px, -5px) rotate(-3deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    .backFace.cut {
+      animation: cutAnimation 1s ease;
     }
     .message {
       margin-top: 20px;
@@ -71,8 +104,11 @@
   <h1>オラクルカード</h1>
   <div class="card-container">
     <div class="card" id="card">
-      <div class="card-face back">
-        <img id="backImage" src="back1.jpg" alt="カードの裏面">
+      <div class="card-face back" id="backFaces">
+        <img class="backFace" src="back1.jpg" alt="カード裏面1">
+        <img class="backFace" src="back2.jpg" alt="カード裏面2">
+        <img class="backFace" src="back3.jpg" alt="カード裏面3">
+        <img class="backFace" src="back4.jpg" alt="カード裏面4">
       </div>
       <div class="card-face front">
         <img id="frontImage" src="" alt="カードの表面">
@@ -82,51 +118,49 @@
   <div id="cardMessage" class="message"></div>
   <button onclick="shuffleCard()">シャッフル</button>
   <script>
-    // 表面のカード画像と意味
+    // 表面のカード画像とその意味
     const cards = {
       "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
       "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
       "star.jpg": "願いが叶う時。ポジティブなエネルギーがあなたを包みます。",
       "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
     };
-    // 複数の裏面画像（back1～back4）
-    const backImages = ["back1.jpg", "back2.jpg", "back3.jpg", "back4.jpg"];
 
     function shuffleCard() {
       const cardElement = document.getElementById("card");
-      const backImage = document.getElementById("backImage");
       const frontImage = document.getElementById("frontImage");
       const cardMessage = document.getElementById("cardMessage");
+      const backFaces = document.querySelectorAll(".backFace");
 
-      // メッセージを非表示＆カードを裏面状態に戻す
+      // メッセージを非表示、カードを裏面状態に戻す
       cardMessage.style.display = "none";
-      cardElement.classList.remove("flip");
+      cardElement.classList.remove("flip", "float");
 
-      let shuffleCount = 0;
-      const maxShuffleCount = 10; // 裏面のシャッフル回数を増加
+      // 裏面の4枚すべてに cut アニメーションを追加
+      backFaces.forEach(face => {
+        face.classList.add("cut");
+      });
 
-      // 裏面画像をランダムに切り替え（300ms ごと）
-      const interval = setInterval(() => {
-        const randomBack = backImages[Math.floor(Math.random() * backImages.length)];
-        backImage.src = randomBack;
-        shuffleCount++;
-        if (shuffleCount >= maxShuffleCount) {
-          clearInterval(interval);
-          // シャッフル終了後、表面のカード画像をランダムに選択
-          const cardKeys = Object.keys(cards);
-          const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
-          frontImage.src = randomFront;
-          // 少し待ってからカードを回転して表面を表示
-          setTimeout(() => {
-            cardElement.classList.add("flip");
-            // 回転後にメッセージを表示
-            setTimeout(() => {
-              cardMessage.textContent = cards[randomFront];
-              cardMessage.style.display = "block";
-            }, 1000);
-          }, 300);
-        }
-      }, 300);
+      // 1秒後、cut アニメーションを終了して裏面のアニメーションを止める
+      setTimeout(() => {
+        backFaces.forEach(face => {
+          face.classList.remove("cut");
+        });
+
+        // 表面のカード画像をランダムに選ぶ
+        const cardKeys = Object.keys(cards);
+        const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
+        frontImage.src = randomFront;
+
+        // カード全体に flip と float の効果を追加し、裏面から表面にめくる＆上に浮かび上がる
+        cardElement.classList.add("flip", "float");
+
+        // 1秒後にメッセージを表示
+        setTimeout(() => {
+          cardMessage.textContent = cards[randomFront];
+          cardMessage.style.display = "block";
+        }, 1000);
+      }, 1000); // 裏面カットアニメーションの時間
     }
   </script>
 </body>
