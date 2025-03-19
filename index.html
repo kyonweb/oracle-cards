@@ -12,7 +12,9 @@
       margin: 0;
       padding: 20px;
     }
-    h1 { margin-top: 20px; }
+    h1 {
+      margin-top: 20px;
+    }
     .card-container {
       width: 300px;
       height: 400px;
@@ -20,43 +22,14 @@
       position: relative;
       perspective: 1000px;
     }
-    /* メインカード：裏面から回転して表面表示 */
-    .card {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      transform-style: preserve-3d;
-      transition: transform 1s ease-in-out;
-      z-index: 1;
-    }
-    .card.flip {
-      transform: rotateY(180deg) translateY(-30px);
-    }
-    .card .card-face {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      backface-visibility: hidden;
-      top: 0;
-      left: 0;
-    }
-    /* 表側は最初隠しておく */
-    .card .front { transform: rotateY(180deg); }
-    .card img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    /* デッキ：シャッフル用裏面カードの集合 */
+    /* デッキ内のカード（裏面）のスタイル */
     .deck {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 2;
+      z-index: 1;
     }
     .deck-card {
       position: absolute;
@@ -65,9 +38,9 @@
       width: 100%;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.8s ease;
+      transition: transform 0.5s ease, opacity 0.5s ease;
     }
-    /* メッセージ */
+    /* メッセージのスタイル */
     .message {
       margin-top: 20px;
       font-size: 18px;
@@ -79,7 +52,7 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    /* シャッフルボタンはカードコンテナの外、下部に配置 */
+    /* シャッフルボタンはカードコンテナの下に配置 */
     button {
       background-color: #007bff;
       color: white;
@@ -89,23 +62,18 @@
       font-size: 16px;
       border-radius: 5px;
       cursor: pointer;
+      position: relative;
+      z-index: 999;
     }
-    button:hover { background-color: #0056b3; }
+    button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
   <h1>オラクルカード</h1>
   <div class="card-container">
-    <!-- メインカード（回転して表面表示） -->
-    <div class="card" id="card">
-      <div class="card-face back">
-        <img id="mainBack" src="back1.jpg" alt="カード裏面">
-      </div>
-      <div class="card-face front">
-        <img id="cardFront" src="" alt="カード表面">
-      </div>
-    </div>
-    <!-- デッキ：シャッフル用裏面カードの集合 -->
+    <!-- デッキ：初期状態は4枚の裏面カードが完全に重なって表示 -->
     <div class="deck" id="deck">
       <img class="deck-card" src="back1.jpg" alt="デッキカード1">
       <img class="deck-card" src="back2.jpg" alt="デッキカード2">
@@ -115,8 +83,9 @@
   </div>
   <div id="cardMessage" class="message"></div>
   <button id="shuffleButton">シャッフル</button>
+  
   <script>
-    // 表面のカード画像とその意味
+    // 表面に使うカード画像とその意味
     const cards = {
       "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
       "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
@@ -124,72 +93,72 @@
       "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
     };
 
-    // DOM内のデッキカードの順序をランダムに入れ替える関数
-    function randomizeDeck() {
+    // シャッフルボタンが押されたときの動作
+    function shuffleCard() {
       const deck = document.getElementById("deck");
       const deckCards = Array.from(deck.children);
-      deckCards.sort(() => Math.random() - 0.5);
-      deckCards.forEach(card => {
-        deck.appendChild(card);
-      });
-    }
-
-    function shuffleCard() {
-      const cardElement = document.getElementById("card");
-      const cardFront = document.getElementById("cardFront");
       const cardMessage = document.getElementById("cardMessage");
-      const deck = document.getElementById("deck");
-      const deckCards = document.querySelectorAll(".deck-card");
-
-      // 初期状態：メッセージ非表示、メインカードを裏面に戻す、デッキ表示
+      
+      // 初期状態のリセット：すべてのカードを重ね、透明度を1に戻す
+      deckCards.forEach(card => {
+        card.style.transform = "translate(0, 0) rotate(0deg)";
+        card.style.opacity = "1";
+      });
       cardMessage.style.display = "none";
-      cardElement.classList.remove("flip");
-      deck.style.display = "block";
-
-      // まず、デッキカードのDOM順序をランダムに入れ替える
-      randomizeDeck();
-
-      // 第1フェーズ：カードを広げる・混ぜる動き（0～0.5秒間、繰り返しランダムに移動）
-      let mixCount = 0;
-      const mixInterval = setInterval(() => {
-        deckCards.forEach(deckCard => {
-          const randomX = Math.floor(Math.random() * 161) - 80;  // -80px ～ 80px
-          const randomY = Math.floor(Math.random() * 161) - 80;  // -80px ～ 80px
-          const randomAngle = Math.floor(Math.random() * 61) - 30; // -30deg ～ 30deg
-          deckCard.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomAngle}deg)`;
-        });
-        mixCount++;
-        if (mixCount >= 5) { // 5回繰り返す（約0.75秒）
-          clearInterval(mixInterval);
-          // 第2フェーズ：最終的な混ざり具合として、各カードをさらにランダムに配置
-          deckCards.forEach(deckCard => {
-            const randomX = Math.floor(Math.random() * 161) - 80;
-            const randomY = Math.floor(Math.random() * 161) - 80;
-            const randomAngle = Math.floor(Math.random() * 61) - 30;
-            deckCard.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomAngle}deg)`;
-          });
-          // 0.8秒後に、全カードを元の位置に戻す
-          setTimeout(() => {
-            deckCards.forEach(deckCard => {
-              deckCard.style.transform = "translate(0, 0) rotate(0deg)";
-            });
-          }, 800);
-        }
-      }, 150);
-
-      // 第3フェーズ：1秒後に、デッキを非表示にして、表面のカード画像をランダムに選択し、メインカードを回転して表面を表示
+      
+      // 1. まず、カードのDOM順序をランダムに並び替える（オプション）
+      deckCards.sort(() => Math.random() - 0.5);
+      deckCards.forEach(card => deck.appendChild(card));
+      
+      // 2. カードを横に広がらせる
+      // 固定のオフセット（例：4枚の場合のオフセット）＋少しのランダム変動
+      const offsets = [-90, -30, 30, 90]; // 4枚の基準値
+      deckCards.forEach((card, index) => {
+        const variation = Math.floor(Math.random() * 21) - 10; // -10px ～ 10px
+        const offsetX = offsets[index] + variation;
+        card.style.transform = `translateX(${offsetX}px)`;
+      });
+      
+      // 広がるアニメーションの完了を待つ（500ms後）
       setTimeout(() => {
-        deck.style.display = "none";
-        const cardKeys = Object.keys(cards);
-        const randomFrontImage = cardKeys[Math.floor(Math.random() * cardKeys.length)];
-        cardFront.src = randomFrontImage;
-        cardElement.classList.add("flip");
-        // 第4フェーズ：さらに1秒後に、カードの意味を表示
+        // 3. さらに、カードをランダムに混ぜ合わせる動きを追加（今回は横方向のランダムな動き）
+        deckCards.forEach(card => {
+          const randomX = Math.floor(Math.random() * 161) - 80;  // -80px ～ 80px
+          card.style.transform = `translateX(${randomX}px)`;
+        });
+        
+        // その状態を0.5秒間キープ
         setTimeout(() => {
-          cardMessage.textContent = cards[randomFrontImage];
-          cardMessage.style.display = "block";
-        }, 1000);
-      }, 1000);
+          // 4. ランダムに1枚のカードを選ぶ
+          const chosenIndex = Math.floor(Math.random() * deckCards.length);
+          const chosenCard = deckCards[chosenIndex];
+          
+          // 他のカードはフェードアウト
+          deckCards.forEach((card, index) => {
+            if (index !== chosenIndex) {
+              card.style.opacity = "0";
+            }
+          });
+          
+          // 5. 選ばれたカードを回転させる（フリップアニメーション）
+          // まず、設定された変形をリセットし、回転用のトランジションを設定
+          chosenCard.style.transition = "transform 0.6s ease";
+          // 0.3秒後に、画像の裏面から表面に切り替えるため、画像ソースを更新
+          const cardKeys = Object.keys(cards);
+          const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
+          setTimeout(() => {
+            chosenCard.src = randomFront;
+          }, 300);
+          // その後、カードをY軸回転させる（0度→180度）
+          chosenCard.style.transform = "rotateY(180deg)";
+          
+          // 6. 回転アニメーション完了後（約600ms後）に、カードの意味を表示
+          setTimeout(() => {
+            cardMessage.textContent = cards[randomFront];
+            cardMessage.style.display = "block";
+          }, 600 + 300); // 900ms後
+        }, 500);
+      }, 500);
     }
 
     document.getElementById("shuffleButton").addEventListener("click", shuffleCard);
