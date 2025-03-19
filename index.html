@@ -19,8 +19,9 @@
     .scroll-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      width: 100%;
     }
-    /* カードコンテナ：今回は4枚用に幅を800pxに設定（将来的にはカード枚数に合わせて調整） */
+    /* カードコンテナ：4枚の場合は幅800px、将来的には枚数に合わせて調整 */
     .card-container {
       width: 800px;
       height: 350px;
@@ -33,11 +34,13 @@
       width: 200px;
       height: 300px;
       position: absolute;
-      left: 0; /* 初期状態は重なっている */
+      left: 0; /* 初期状態はすべて重なっている */
       transition: left 1.5s ease, transform 1.5s ease, opacity 1.5s ease;
       cursor: pointer;
       transform-style: preserve-3d;
+      z-index: 1;
     }
+    /* カード内部の2面 */
     .deck-card .card-face {
       width: 100%;
       height: 100%;
@@ -60,7 +63,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    /* メッセージのスタイル */
+    /* メッセージのスタイル（中央に表示） */
     .message {
       margin-top: 20px;
       font-size: 18px;
@@ -72,7 +75,7 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    /* 「選びなおす」ボタンはカードコンテナの下に表示 */
+    /* 「選びなおす」ボタン（中央に表示） */
     button {
       background-color: #007bff;
       color: white;
@@ -95,7 +98,7 @@
   <!-- 横スクロール用ラッパー -->
   <div class="scroll-wrapper">
     <div class="card-container" id="cardContainer">
-      <!-- 4枚のカードを重ねた状態で配置（初期状態は全て left:0 ） -->
+      <!-- 4枚のカードを重ねた状態で配置（初期状態はすべて left:0 ） -->
       <div class="deck-card" data-index="0" style="left: 0px;">
         <div class="card-face card-back">
           <img src="back1.jpg" alt="カード裏面">
@@ -168,16 +171,19 @@
         const cardKeys = Object.keys(cards);
         const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
 
-        // 選ばれたカードの front 画像を設定
+        // 選択されたカードの front 画像を設定
         const frontImg = this.querySelector('.card-front img');
         frontImg.src = randomFront;
 
-        // 選んだカードを大きくポップアップさせる（拡大しながらフリップ）
-        this.style.transition = "transform 0.6s ease, top 0.6s ease";
+        // 選んだカードを大きくポップアップさせ、中央に配置する
+        // カードコンテナは幅800px、高さ350pxなので、中央は left:300px, top:25px （カードサイズ200×300の場合）
+        this.style.transition = "transform 0.6s ease, left 0.6s ease, top 0.6s ease";
         this.style.transform = "rotateY(180deg) scale(1.5)";
-        this.style.top = "-30px";
+        this.style.left = "300px";
+        this.style.top = "25px";
+        this.style.zIndex = "999"; // 前面に表示
 
-        // 選ばれなかったカードは小さくしてフェードアウト
+        // 選ばれなかったカードは縮小してフェードアウト
         deckCards.forEach(c => {
           if (c !== this) {
             c.style.transition = "transform 0.6s ease, opacity 0.6s ease";
@@ -186,7 +192,7 @@
           }
         });
 
-        // 0.6秒後にカードの意味を表示し、「選びなおす」ボタンを出す
+        // 0.6秒後に、カードの意味を表示し、「選びなおす」ボタンを出す
         setTimeout(() => {
           document.getElementById("cardMessage").textContent = cards[randomFront];
           document.getElementById("cardMessage").style.display = "block";
@@ -200,7 +206,6 @@
       // メッセージとボタンを非表示にする
       document.getElementById("cardMessage").style.display = "none";
       this.style.display = "none";
-
       // すべてのカードをリセット：フリップ解除、front画像クリア、クリック有効化
       const deckCards = document.querySelectorAll('.deck-card');
       deckCards.forEach(card => {
@@ -211,8 +216,9 @@
         card.style.top = "0px";
         card.style.opacity = "1";
         card.style.pointerEvents = "auto";
-        // 初期状態に戻す（重なった状態）
+        // 初期状態に戻す（重なった状態：left:0）
         card.style.left = "0px";
+        card.style.zIndex = "1";
       });
       // ゆっくりリセット後に再度広がるアニメーションを開始（1.5秒後）
       setTimeout(spreadDeck, 1500);
