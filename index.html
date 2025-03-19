@@ -18,20 +18,31 @@
             height: 400px;
             margin: 20px auto;
             position: relative;
-            perspective: 1000px; /* 3D効果 */
+            perspective: 1000px;
         }
         .card {
             width: 100%;
             height: 100%;
             position: absolute;
-            transition: transform 1s ease-in-out;
-            transform-style: preserve-3d; /* 3Dを維持 */
+            transition: transform 1s ease-in-out, top 0.3s ease-in-out;
+            transform-style: preserve-3d;
+            top: 0;
+        }
+        .card.shuffle {
+            animation: shuffleAnimation 0.6s ease-in-out;
+        }
+        @keyframes shuffleAnimation {
+            0% { transform: rotateY(0deg) translateX(0); }
+            25% { transform: rotateY(0deg) translateX(-10px); }
+            50% { transform: rotateY(0deg) translateX(10px); }
+            75% { transform: rotateY(0deg) translateX(-5px); }
+            100% { transform: rotateY(0deg) translateX(0); }
         }
         .card .card-face {
             width: 100%;
             height: 100%;
             position: absolute;
-            backface-visibility: hidden; /* 背面の要素を隠す */
+            backface-visibility: hidden;
         }
         .card .front {
             transform: rotateY(180deg);
@@ -53,7 +64,7 @@
             display: inline-block;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            display: none; /* 最初は非表示 */
+            display: none;
         }
         button {
             background-color: #007bff;
@@ -90,7 +101,6 @@
     <button onclick="shuffleCard()">シャッフル</button>
 
     <script>
-        // 画像リストとメッセージ
         const cards = {
             "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
             "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
@@ -106,17 +116,25 @@
             const card = document.getElementById("card");
             const frontImage = document.getElementById("frontImage");
 
-            // カードの表面の画像をセット（シャッフル後に見えるように）
-            frontImage.src = selectedCard;
+            // シャッフルアニメーションを追加
+            card.classList.add("shuffle");
 
-            // カードを回転して表にする
-            card.style.transform = "rotateY(180deg)";
-
-            // メッセージ表示
             setTimeout(() => {
-                document.getElementById("cardMessage").textContent = cards[selectedCard];
-                document.getElementById("cardMessage").style.display = "block";
-            }, 1000); // 回転後に表示
+                // シャッフルが終わったらカードを反転
+                frontImage.src = selectedCard;
+                card.style.transform = "rotateY(180deg)";
+
+                // メッセージ表示
+                setTimeout(() => {
+                    document.getElementById("cardMessage").textContent = cards[selectedCard];
+                    document.getElementById("cardMessage").style.display = "block";
+                }, 1000);
+
+                // シャッフルクラスを削除（次回シャッフルのため）
+                setTimeout(() => {
+                    card.classList.remove("shuffle");
+                }, 600);
+            }, 600);
         }
     </script>
 
