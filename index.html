@@ -40,6 +40,7 @@
             display: inline-block;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: none; /* 最初は非表示 */
         }
         button {
             background-color: #007bff;
@@ -61,20 +62,20 @@
     <h1>オラクルカード</h1>
 
     <div class="card-container">
-        <img id="cardImage" src="" alt="カードの画像">
+        <img id="cardImage" src="back.jpg" alt="カードの裏面">
     </div>
 
-    <div id="cardMessage" class="message">カードの意味がここに表示されます</div>
+    <div id="cardMessage" class="message"></div>
 
     <button onclick="shuffleCard()">シャッフル</button>
 
     <script>
         // 画像リストとメッセージ
         const cards = {
-            "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
-            "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
-            "star.jpg": "願いが叶う時。ポジティブなエネルギーを受け取って！",
-            "tower.jpg": "大きな変化が訪れるかもしれませんが、それは新しい始まりです！"
+            "sun.jpg": "太陽のカードです。希望と光の象徴。あなたの未来は明るい！",
+            "moon.jpg": "つきのカードです。直感を信じてください。答えはあなたの中にあります。",
+            "star.jpg": "ほしのカードです。願いが叶う時。ポジティブなエネルギーを受け取って！",
+            "tower.jpg": "塔のカードです。大きな変化が訪れるかもしれませんが、それは新しい始まりです！"
         };
 
         function shuffleCard() {
@@ -84,12 +85,8 @@
 
             document.getElementById("cardImage").src = selectedCard;
             document.getElementById("cardMessage").textContent = cards[selectedCard];
+            document.getElementById("cardMessage").style.display = "block"; // メッセージを表示
         }
-
-        // ページ読み込み時にランダムな画像を表示
-        window.onload = function() {
-            shuffleCard();
-        };
     </script>
 
 </body>
