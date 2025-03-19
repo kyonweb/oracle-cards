@@ -15,25 +15,29 @@
     h1 {
       margin-top: 20px;
     }
-    /* カードコンテナ：十分な横幅・高さに設定 */
+    /* 横スクロール用ラッパー */
+    .scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* カードコンテナ：今回は4枚用に幅を800pxに設定（将来的にはカード枚数に合わせて調整） */
     .card-container {
-      width: 600px;
-      height: 250px;
+      width: 800px;
+      height: 350px;
       margin: 20px auto;
       position: relative;
-      overflow: hidden;
+      perspective: 1000px;
     }
-    /* 各カード（deck-card）のスタイル：サイズ大きく設定 */
+    /* 各カード（deck-card）のスタイル：サイズ200px×300px */
     .deck-card {
-      width: 150px;
-      height: 225px;
+      width: 200px;
+      height: 300px;
       position: absolute;
-      left: 0; /* 初期状態は全て重なっている */
-      transition: left 1s ease, transform 1s ease, opacity 1s ease;
+      left: 0; /* 初期状態は重なっている */
+      transition: left 1.5s ease, transform 1.5s ease, opacity 1.5s ease;
       cursor: pointer;
       transform-style: preserve-3d;
     }
-    /* カード内部の2面 */
     .deck-card .card-face {
       width: 100%;
       height: 100%;
@@ -41,11 +45,11 @@
       top: 0;
       left: 0;
       backface-visibility: hidden;
-      border-radius: 8px;
+      border-radius: 10px;
     }
     /* 裏面：初期状態で表示 */
     .deck-card .card-back { }
-    /* 表面：初期状態は180deg回転で隠す */
+    /* 表面：初期状態は180deg回転して隠す */
     .deck-card .card-front {
       transform: rotateY(180deg);
     }
@@ -53,7 +57,7 @@
       width: 100%;
       height: 100%;
       display: block;
-      border-radius: 8px;
+      border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     /* メッセージのスタイル */
@@ -68,7 +72,7 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    /* 「選びなおす」ボタン：カードコンテナの下に配置 */
+    /* 「選びなおす」ボタンはカードコンテナの下に表示 */
     button {
       background-color: #007bff;
       color: white;
@@ -88,38 +92,41 @@
 </head>
 <body>
   <h1>オラクルカード</h1>
-  <div class="card-container" id="cardContainer">
-    <!-- 4枚のカードを重ねた状態で配置（初期状態は全て left:0 ） -->
-    <div class="deck-card" data-index="0" style="left: 0px;">
-      <div class="card-face card-back">
-        <img src="back1.jpg" alt="カード裏面">
+  <!-- 横スクロール用ラッパー -->
+  <div class="scroll-wrapper">
+    <div class="card-container" id="cardContainer">
+      <!-- 4枚のカードを重ねた状態で配置（初期状態は全て left:0 ） -->
+      <div class="deck-card" data-index="0" style="left: 0px;">
+        <div class="card-face card-back">
+          <img src="back1.jpg" alt="カード裏面">
+        </div>
+        <div class="card-face card-front">
+          <img src="" alt="カード表面">
+        </div>
       </div>
-      <div class="card-face card-front">
-        <img src="" alt="カード表面">
+      <div class="deck-card" data-index="1" style="left: 0px;">
+        <div class="card-face card-back">
+          <img src="back2.jpg" alt="カード裏面">
+        </div>
+        <div class="card-face card-front">
+          <img src="" alt="カード表面">
+        </div>
       </div>
-    </div>
-    <div class="deck-card" data-index="1" style="left: 0px;">
-      <div class="card-face card-back">
-        <img src="back2.jpg" alt="カード裏面">
+      <div class="deck-card" data-index="2" style="left: 0px;">
+        <div class="card-face card-back">
+          <img src="back3.jpg" alt="カード裏面">
+        </div>
+        <div class="card-face card-front">
+          <img src="" alt="カード表面">
+        </div>
       </div>
-      <div class="card-face card-front">
-        <img src="" alt="カード表面">
-      </div>
-    </div>
-    <div class="deck-card" data-index="2" style="left: 0px;">
-      <div class="card-face card-back">
-        <img src="back3.jpg" alt="カード裏面">
-      </div>
-      <div class="card-face card-front">
-        <img src="" alt="カード表面">
-      </div>
-    </div>
-    <div class="deck-card" data-index="3" style="left: 0px;">
-      <div class="card-face card-back">
-        <img src="back4.jpg" alt="カード裏面">
-      </div>
-      <div class="card-face card-front">
-        <img src="" alt="カード表面">
+      <div class="deck-card" data-index="3" style="left: 0px;">
+        <div class="card-face card-back">
+          <img src="back4.jpg" alt="カード裏面">
+        </div>
+        <div class="card-face card-front">
+          <img src="" alt="カード表面">
+        </div>
       </div>
     </div>
   </div>
@@ -135,19 +142,19 @@
       "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
     };
 
-    // カードを横にゆっくり広げる関数
+    // カードをゆっくり広げる関数
     function spreadDeck() {
       const deckCards = document.querySelectorAll('.deck-card');
-      // 均等に配置：コンテナ幅600px、カード幅150px → 左: 0, 150, 300, 450px
+      // 4枚の場合、目標の left: 0, 200, 400, 600px に配置
       deckCards.forEach((card, index) => {
-        let targetLeft = 150 * index;
+        let targetLeft = 200 * index;
         card.style.left = targetLeft + "px";
       });
     }
 
-    // ページ読み込み時に、ゆっくり広がるアニメーションを開始（800ms後）
+    // ページ読み込み時に、ゆっくり広がるアニメーションを開始（1秒後）
     window.onload = function() {
-      setTimeout(spreadDeck, 800);
+      setTimeout(spreadDeck, 1000);
     };
 
     // カード選択時の動作
@@ -156,15 +163,29 @@
       card.addEventListener('click', function() {
         // すべてのカードのクリックを無効化
         deckCards.forEach(c => c.style.pointerEvents = "none");
+
         // ランダムに表面画像を選ぶ
         const cardKeys = Object.keys(cards);
         const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
-        // 選択されたカードの front 画像を設定
+
+        // 選ばれたカードの front 画像を設定
         const frontImg = this.querySelector('.card-front img');
         frontImg.src = randomFront;
-        // 選択されたカードをフリップして上に浮かび上がる（サイズはそのまま）
-        this.style.transition = "transform 0.6s ease";
-        this.style.transform = "rotateY(180deg)";
+
+        // 選んだカードを大きくポップアップさせる（拡大しながらフリップ）
+        this.style.transition = "transform 0.6s ease, top 0.6s ease";
+        this.style.transform = "rotateY(180deg) scale(1.5)";
+        this.style.top = "-30px";
+
+        // 選ばれなかったカードは小さくしてフェードアウト
+        deckCards.forEach(c => {
+          if (c !== this) {
+            c.style.transition = "transform 0.6s ease, opacity 0.6s ease";
+            c.style.transform = "scale(0.5)";
+            c.style.opacity = "0";
+          }
+        });
+
         // 0.6秒後にカードの意味を表示し、「選びなおす」ボタンを出す
         setTimeout(() => {
           document.getElementById("cardMessage").textContent = cards[randomFront];
@@ -179,20 +200,22 @@
       // メッセージとボタンを非表示にする
       document.getElementById("cardMessage").style.display = "none";
       this.style.display = "none";
-      // すべてのカードをリセット（フリップ解除、front画像クリア、クリック有効化）
+
+      // すべてのカードをリセット：フリップ解除、front画像クリア、クリック有効化
       const deckCards = document.querySelectorAll('.deck-card');
       deckCards.forEach(card => {
-        card.style.transition = "none";
-        card.classList.remove("flip"); // フリップ状態解除（もし使用していれば）
+        card.style.transition = "all 1.5s ease"; // ゆっくりリセット
         const frontImg = card.querySelector('.card-front img');
         frontImg.src = "";
-        card.style.transform = "rotateY(0deg)";
+        card.style.transform = "rotateY(0deg) scale(1)";
+        card.style.top = "0px";
+        card.style.opacity = "1";
         card.style.pointerEvents = "auto";
-        // 初期状態に戻す（重なった状態：left:0）
+        // 初期状態に戻す（重なった状態）
         card.style.left = "0px";
       });
-      // 少し待ってから再度ゆっくり広げる（800ms後）
-      setTimeout(spreadDeck, 800);
+      // ゆっくりリセット後に再度広がるアニメーションを開始（1.5秒後）
+      setTimeout(spreadDeck, 1500);
     });
   </script>
 </body>
