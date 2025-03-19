@@ -25,7 +25,7 @@
            transform-style: preserve-3d;
            transition: transform 1s ease-in-out;
        }
-       /* カードが回転して表面を表示 */
+       /* 回転して表面を表示 */
        .card.flip { transform: rotateY(180deg); }
        .card .card-face {
            width: 100%;
@@ -33,7 +33,7 @@
            position: absolute;
            backface-visibility: hidden;
        }
-       /* 表側は最初は裏面側に隠しておく */
+       /* 表面は裏面側に隠す */
        .card .front { transform: rotateY(180deg); }
        .card img {
            width: 100%;
@@ -82,14 +82,14 @@
    <div id="cardMessage" class="message"></div>
    <button onclick="shuffleCard()">シャッフル</button>
    <script>
-       // 表面のカード画像とその意味
+       // 表面のカード画像とメッセージ
        const cards = {
            "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
            "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
            "star.jpg": "願いが叶う時。ポジティブなエネルギーがあなたを包みます。",
            "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
        };
-       // 裏面の画像群（こちらも複数用意してください）
+       // 複数の裏面画像（back1～back4）
        const backImages = ["back1.jpg", "back2.jpg", "back3.jpg", "back4.jpg"];
 
        function shuffleCard() {
@@ -98,14 +98,14 @@
            const frontImage = document.getElementById("frontImage");
            const cardMessage = document.getElementById("cardMessage");
 
-           // メッセージを非表示にして、カードを裏面状態に戻す
+           // メッセージを非表示＆カードを裏面状態に戻す
            cardMessage.style.display = "none";
            cardElement.classList.remove("flip");
 
            let shuffleCount = 0;
            const maxShuffleCount = 4; // 裏面のシャッフル回数
 
-           // 裏面画像を数回切り替える（200ms ごと）
+           // 裏面画像をランダムに切り替え（300ms ごと）
            const interval = setInterval(() => {
                const randomBack = backImages[Math.floor(Math.random() * backImages.length)];
                backImage.src = randomBack;
@@ -116,7 +116,7 @@
                    const cardKeys = Object.keys(cards);
                    const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
                    frontImage.src = randomFront;
-                   // 少し待ってからカードを回転（裏面から表面にめくる）
+                   // 少し待ってからカードを回転して表面を表示
                    setTimeout(() => {
                        cardElement.classList.add("flip");
                        // 回転後にメッセージを表示
@@ -126,7 +126,7 @@
                        }, 1000);
                    }, 200);
                }
-           }, 200);
+           }, 300);
        }
    </script>
 </body>
