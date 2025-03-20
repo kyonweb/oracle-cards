@@ -14,6 +14,7 @@
     }
     h1 {
       margin-top: 20px;
+      text-align: center;
     }
     .button {
       background-color: #007bff;
@@ -33,13 +34,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: 30px;
+      margin-top: 50px;
       transition: all 4.5s ease;
     }
     .deck-card {
-      width: 200px;
-      height: 300px;
-      margin: 0 -50px;
+      width: 180px;
+      height: 270px;
+      margin: 0 -40px;
       transition: all 4.5s ease;
       cursor: pointer;
       transform-style: preserve-3d;
@@ -67,7 +68,7 @@
     }
     .message {
       margin-top: 20px;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       color: #333;
       padding: 15px;
@@ -81,8 +82,8 @@
     }
     .selected-card {
       position: absolute;
-      width: 250px;
-      height: 375px;
+      width: 220px;
+      height: 330px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) rotateY(180deg) scale(1.2);
@@ -125,15 +126,21 @@
       "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
     };
 
+    function initializeDeck() {
+      document.getElementById("cardContainer").style.opacity = "1";
+      document.querySelectorAll('.deck-card').forEach((card, index) => {
+        card.style.transform = `translateX(${(index - 1.5) * 200}px)`;
+      });
+    }
+
     function resetDeck() {
       document.getElementById("cardMessage").style.display = "none";
       document.getElementById("rechooseButton").style.display = "none";
 
       document.querySelectorAll('.deck-card').forEach((card, index) => {
         card.classList.remove('selected-card');
-        card.style.transition = "all 4.5s ease";
         card.querySelector('.card-front img').src = "";
-        card.style.transform = "rotateY(0deg) scale(1)";
+        card.style.transform = `translateX(${(index - 1.5) * 200}px) rotateY(0deg) scale(1)`;
         card.style.opacity = "1";
         card.style.pointerEvents = "auto";
       });
@@ -161,6 +168,7 @@
     });
 
     document.getElementById("rechooseButton").addEventListener("click", resetDeck);
+    window.onload = initializeDeck;
   </script>
 </body>
 </html>
