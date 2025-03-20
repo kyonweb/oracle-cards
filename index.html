@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>オラクルカード</title>
   <style>
-    /* 基本設定 */
     body {
       font-family: Arial, sans-serif;
       text-align: center;
@@ -16,7 +15,6 @@
     h1 {
       margin-top: 20px;
     }
-    /* ボタンのスタイル */
     .button {
       background-color: #007bff;
       color: white;
@@ -26,43 +24,25 @@
       border-radius: 5px;
       cursor: pointer;
       margin-top: 20px;
-      z-index: 10;
       display: inline-block;
     }
     .button:hover {
       background-color: #0056b3;
     }
-    /* 横スクロール用ラッパー */
-    .scroll-wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      width: 100%;
-      margin: 0 auto;
-    }
-    /* カードコンテナ */
     .card-container {
       width: 800px;
       height: 450px;
       margin: 20px auto;
       position: relative;
       perspective: 1000px;
-      overflow: visible;
     }
-    @media (max-width: 600px) {
-      .card-container {
-        width: 600px;
-      }
-    }
-    /* 各カード */
     .deck-card {
       width: 200px;
       height: 300px;
       position: absolute;
-      left: 0;
-      transition: left 2s ease, transform 2s ease, opacity 2s ease;
+      transition: transform 1.5s ease, left 1.5s ease, opacity 1.5s ease;
       cursor: pointer;
       transform-style: preserve-3d;
-      z-index: 1;
     }
     .deck-card .card-face {
       width: 100%;
@@ -84,7 +64,6 @@
       object-fit: cover;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    /* メッセージ */
     .message {
       margin-top: 20px;
       font-size: 18px;
@@ -101,24 +80,22 @@
 <body>
   <h1>オラクルカード</h1>
 
-  <div class="scroll-wrapper">
-    <div class="card-container" id="cardContainer">
-      <div class="deck-card" data-index="0">
-        <div class="card-face card-back"><img src="back1.jpg" alt="カード裏面"></div>
-        <div class="card-face card-front"><img src="" alt="カード表面"></div>
-      </div>
-      <div class="deck-card" data-index="1">
-        <div class="card-face card-back"><img src="back2.jpg" alt="カード裏面"></div>
-        <div class="card-face card-front"><img src="" alt="カード表面"></div>
-      </div>
-      <div class="deck-card" data-index="2">
-        <div class="card-face card-back"><img src="back3.jpg" alt="カード裏面"></div>
-        <div class="card-face card-front"><img src="" alt="カード表面"></div>
-      </div>
-      <div class="deck-card" data-index="3">
-        <div class="card-face card-back"><img src="back4.jpg" alt="カード裏面"></div>
-        <div class="card-face card-front"><img src="" alt="カード表面"></div>
-      </div>
+  <div class="card-container" id="cardContainer">
+    <div class="deck-card" data-index="0">
+      <div class="card-face card-back"><img src="back1.jpg" alt="カード裏面"></div>
+      <div class="card-face card-front"><img src="" alt="カード表面"></div>
+    </div>
+    <div class="deck-card" data-index="1">
+      <div class="card-face card-back"><img src="back2.jpg" alt="カード裏面"></div>
+      <div class="card-face card-front"><img src="" alt="カード表面"></div>
+    </div>
+    <div class="deck-card" data-index="2">
+      <div class="card-face card-back"><img src="back3.jpg" alt="カード裏面"></div>
+      <div class="card-face card-front"><img src="" alt="カード表面"></div>
+    </div>
+    <div class="deck-card" data-index="3">
+      <div class="card-face card-back"><img src="back4.jpg" alt="カード裏面"></div>
+      <div class="card-face card-front"><img src="" alt="カード表面"></div>
     </div>
   </div>
 
@@ -152,11 +129,21 @@
 
     document.querySelectorAll('.deck-card').forEach(card => {
       card.addEventListener('click', function() {
-        document.querySelectorAll('.deck-card').forEach(c => c.style.pointerEvents = "none");
+        document.querySelectorAll('.deck-card').forEach(c => {
+          c.style.pointerEvents = "none";
+          if (c !== this) {
+            c.style.opacity = "0";
+          }
+        });
+
         const randomFront = Object.keys(cards)[Math.floor(Math.random() * 4)];
         this.querySelector('.card-front img').src = randomFront;
-        this.style.transform = "rotateY(180deg) scale(1.3)";
+        this.style.transform = "rotateY(180deg) scale(1.5) translateY(-50px)";
+        this.style.left = "50%";
+        this.style.top = "50%";
+        this.style.transformOrigin = "center center";
         this.style.zIndex = "999";
+
         document.getElementById("cardMessage").textContent = cards[randomFront];
         document.getElementById("cardMessage").style.display = "block";
         document.getElementById("rechooseButton").style.display = "inline-block";
@@ -167,15 +154,18 @@
       document.getElementById("cardMessage").style.display = "none";
       document.getElementById("rechooseButton").style.display = "none";
       document.getElementById("chooseButton").style.display = "inline-block";
+
       document.querySelectorAll('.deck-card').forEach(card => {
-        card.style.transition = "all 2s ease";
+        card.style.transition = "all 1.5s ease";
         card.querySelector('.card-front img').src = "";
         card.style.transform = "rotateY(0deg) scale(1)";
         card.style.left = "0px";
+        card.style.opacity = "1";
         card.style.zIndex = "1";
         card.style.pointerEvents = "auto";
       });
-      setTimeout(spreadDeck, 2000);
+
+      setTimeout(spreadDeck, 1500);
     }
 
     document.getElementById("rechooseButton").addEventListener("click", resetDeck);
