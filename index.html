@@ -1,76 +1,184 @@
-<style>
-    /* オラクルカードのメッセージを中央揃え */
-    #cardMessage {
-        display: none;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>オラクルカード</title>
+  <style>
+    /* 基本設定 */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    /* ボタンのスタイル */
+    .button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      z-index: 10;
+      display: inline-block;
+    }
+    .button:hover {
+      background-color: #0056b3;
+    }
+    /* 横スクロール用ラッパー */
+    .scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      margin: 0 auto;
+    }
+    /* カードコンテナ */
+    .card-container {
+      width: 800px;
+      height: 450px;
+      margin: 20px auto;
+      position: relative;
+      perspective: 1000px;
+      overflow: visible;
+    }
+    @media (max-width: 600px) {
+      .card-container {
+        width: 600px;
+      }
+    }
+    /* 各カード */
+    .deck-card {
+      width: 200px;
+      height: 300px;
+      position: absolute;
+      left: 0;
+      transition: left 2s ease, transform 2s ease, opacity 2s ease;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      z-index: 1;
+    }
+    .deck-card .card-face {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      backface-visibility: hidden;
+      border-radius: 10px;
+    }
+    .deck-card .card-front {
+      transform: rotateY(180deg);
+    }
+    .deck-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    /* メッセージ */
+    .message {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      padding: 10px;
+      background-color: #fff;
+      display: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>オラクルカード</h1>
+
+  <div class="scroll-wrapper">
+    <div class="card-container" id="cardContainer">
+      <div class="deck-card" data-index="0">
+        <div class="card-face card-back"><img src="back1.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
+      <div class="deck-card" data-index="1">
+        <div class="card-face card-back"><img src="back2.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
+      <div class="deck-card" data-index="2">
+        <div class="card-face card-back"><img src="back3.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
+      <div class="deck-card" data-index="3">
+        <div class="card-face card-back"><img src="back4.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cardMessage" class="message"></div>
+  
+  <button id="rechooseButton" class="button" style="display: none;">再シャッフル</button>
+  <button id="chooseButton" class="button">1枚カードを選ぶ</button>
+
+  <script>
+    const cards = {
+      "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
+      "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
+      "star.jpg": "願いが叶う時。ポジティブなエネルギーがあなたを包みます。",
+      "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
+    };
+
+    function spreadDeck() {
+      document.querySelectorAll('.deck-card').forEach((card, index) => {
+        card.style.left = (index * 200) + "px";
+      });
     }
 
-    /* ボタンの非表示を確実にする */
-    #chooseButton {
-        display: none;
-    }
-</style>
+    window.onload = function() {
+      setTimeout(spreadDeck, 1000);
+    };
 
-<script>
     document.getElementById("chooseButton").addEventListener("click", function() {
-        this.style.display = "none"; // ボタンを非表示
+      resetDeck();
+      this.style.display = "none";
     });
 
     document.querySelectorAll('.deck-card').forEach(card => {
-        card.addEventListener('click', function() {
-            document.getElementById("chooseButton").style.display = "none"; // カード選択時にボタンを確実に非表示
-            document.querySelectorAll('.deck-card').forEach(c => c.style.pointerEvents = "none");
-            
-            const randomFront = Object.keys(cards)[Math.floor(Math.random() * Object.keys(cards).length)];
-            this.querySelector('.card-front img').src = randomFront;
-            this.style.transform = "rotateY(180deg) scale(1.3)";
-            this.style.left = "270px";
-            this.style.top = "30px";
-            this.style.zIndex = "999";
-
-            document.querySelectorAll('.deck-card').forEach(c => {
-                if (c !== this) {
-                    c.style.transform = "scale(0.5)";
-                    c.style.opacity = "0";
-                }
-            });
-
-            setTimeout(() => {
-                document.getElementById("cardMessage").textContent = cards[randomFront];
-                document.getElementById("cardMessage").style.display = "block";
-                document.getElementById("rechooseButton").style.display = "inline-block";
-            }, 1000);
-        });
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.deck-card').forEach(c => c.style.pointerEvents = "none");
+        const randomFront = Object.keys(cards)[Math.floor(Math.random() * 4)];
+        this.querySelector('.card-front img').src = randomFront;
+        this.style.transform = "rotateY(180deg) scale(1.3)";
+        this.style.zIndex = "999";
+        document.getElementById("cardMessage").textContent = cards[randomFront];
+        document.getElementById("cardMessage").style.display = "block";
+        document.getElementById("rechooseButton").style.display = "inline-block";
+      });
     });
 
     function resetDeck() {
-        document.getElementById("cardMessage").style.display = "none";
-        document.getElementById("rechooseButton").style.display = "none";
-        document.getElementById("chooseButton").style.display = "none"; // 再シャッフル時にも非表示
-
-        document.querySelectorAll('.deck-card').forEach(card => {
-            card.style.transition = "all 1.5s ease";
-            card.style.transform = "rotateY(0deg) scale(1)";
-            card.style.opacity = "1";
-            card.style.left = "";
-            card.style.top = "";
-            card.style.pointerEvents = "auto";
-        });
-
-        setTimeout(spreadDeck, 1500);
+      document.getElementById("cardMessage").style.display = "none";
+      document.getElementById("rechooseButton").style.display = "none";
+      document.getElementById("chooseButton").style.display = "inline-block";
+      document.querySelectorAll('.deck-card').forEach(card => {
+        card.style.transition = "all 2s ease";
+        card.querySelector('.card-front img').src = "";
+        card.style.transform = "rotateY(0deg) scale(1)";
+        card.style.left = "0px";
+        card.style.zIndex = "1";
+        card.style.pointerEvents = "auto";
+      });
+      setTimeout(spreadDeck, 2000);
     }
 
-    document.getElementById("rechooseButton").addEventListener("click", function() {
-        this.style.display = "none";
-        setTimeout(() => {
-            resetDeck();
-        }, 500);
-    });
-</script>
+    document.getElementById("rechooseButton").addEventListener("click", resetDeck);
+  </script>
+</body>
+</html>
