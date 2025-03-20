@@ -53,7 +53,7 @@
       height: 300px;
       position: absolute;
       left: 0;
-      transition: left 1.5s ease, transform 1.5s ease, opacity 1.5s ease;
+      transition: left 2s ease, transform 2s ease, opacity 2s ease;
       cursor: pointer;
       transform-style: preserve-3d;
       z-index: 1;
@@ -127,7 +127,6 @@
     };
 
     document.getElementById("chooseButton").addEventListener("click", function() {
-      resetDeck();
       this.style.display = "none";
     });
 
@@ -150,7 +149,7 @@
           document.getElementById("cardMessage").textContent = cards[randomFront];
           document.getElementById("cardMessage").style.display = "block";
           document.getElementById("rechooseButton").style.display = "inline-block";
-        }, 600);
+        }, 1000);
       });
     });
 
@@ -159,18 +158,21 @@
       document.getElementById("rechooseButton").style.display = "none";
       document.getElementById("chooseButton").style.display = "inline-block";
       document.querySelectorAll('.deck-card').forEach(card => {
-        card.style.transition = "all 0.6s ease";
+        card.style.transition = "all 1.5s ease";
         card.style.transform = "rotateY(0deg) scale(1)";
         card.style.opacity = "1";
         card.style.left = "";
         card.style.top = "";
         card.style.pointerEvents = "auto";
       });
-      setTimeout(spreadDeck, 600);
+      setTimeout(spreadDeck, 1500);
     }
 
     document.getElementById("rechooseButton").addEventListener("click", function() {
-      resetDeck();
+      this.style.display = "none";
+      setTimeout(() => {
+        resetDeck();
+      }, 500);
     });
   </script>
 </body>
