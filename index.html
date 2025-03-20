@@ -123,6 +123,8 @@
         function resetDeck() {
             document.getElementById("cardMessage").style.display = "none";
             document.getElementById("rechooseButton").style.display = "none";
+
+            // 🔥 ここが修正部分！「1枚カードを引く」ボタンを再表示
             document.getElementById("chooseButton").style.display = "inline-block";
 
             const cards = document.querySelectorAll(".deck-card");
