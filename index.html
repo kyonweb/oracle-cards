@@ -1,3 +1,23 @@
+<style>
+    /* オラクルカードのメッセージを中央揃え */
+    #cardMessage {
+        display: none;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+    }
+
+    /* ボタンの非表示を確実にする */
+    #chooseButton {
+        display: none;
+    }
+</style>
+
 <script>
     document.getElementById("chooseButton").addEventListener("click", function() {
         this.style.display = "none"; // ボタンを非表示
@@ -5,8 +25,9 @@
 
     document.querySelectorAll('.deck-card').forEach(card => {
         card.addEventListener('click', function() {
-            document.getElementById("chooseButton").style.display = "none"; // 選択時に「1枚カードを選ぶ」を確実に非表示
+            document.getElementById("chooseButton").style.display = "none"; // カード選択時にボタンを確実に非表示
             document.querySelectorAll('.deck-card').forEach(c => c.style.pointerEvents = "none");
+            
             const randomFront = Object.keys(cards)[Math.floor(Math.random() * Object.keys(cards).length)];
             this.querySelector('.card-front img').src = randomFront;
             this.style.transform = "rotateY(180deg) scale(1.3)";
@@ -32,7 +53,7 @@
     function resetDeck() {
         document.getElementById("cardMessage").style.display = "none";
         document.getElementById("rechooseButton").style.display = "none";
-        document.getElementById("chooseButton").style.display = "none"; // ここで確実に消す
+        document.getElementById("chooseButton").style.display = "none"; // 再シャッフル時にも非表示
 
         document.querySelectorAll('.deck-card').forEach(card => {
             card.style.transition = "all 1.5s ease";
