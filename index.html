@@ -1,112 +1,208 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>オラクルカード</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        #card-container {
-            position: relative;
-            width: 300px;
-            height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .card {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            backface-visibility: hidden;
-            transition: transform 0.6s;
-        }
-        #card-back {
-            background-image: url('back.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        #card-front {
-            background-size: cover;
-            background-position: center;
-            transform: rotateY(180deg);
-        }
-        .flipped #card-back {
-            transform: rotateY(180deg);
-        }
-        .flipped #card-front {
-            transform: rotateY(0deg);
-        }
-        #buttons {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-        button {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        @media (max-width: 600px) {
-            #card-container {
-                width: 90%;
-                height: auto;
-            }
-            button {
-                font-size: 14px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>オラクルカード</title>
+  <style>
+    /* 基本設定 */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    /* TOP画面の「1枚カードを選ぶ」ボタン */
+    #chooseButton {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      z-index: 10;
+    }
+    #chooseButton:hover {
+      background-color: #0056b3;
+    }
+    /* 横スクロール用ラッパー */
+    .scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .card-container {
+      width: 800px;
+      height: 450px;
+      margin: 20px auto;
+      position: relative;
+      perspective: 1000px;
+      overflow: visible;
+    }
+    @media (max-width: 600px) {
+      .card-container {
+        width: 600px;
+      }
+    }
+    .deck-card {
+      width: 200px;
+      height: 300px;
+      position: absolute;
+      left: 0;
+      transition: left 1.5s ease, transform 1.5s ease, opacity 1.5s ease;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      z-index: 1;
+    }
+    .deck-card .card-face {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      backface-visibility: hidden;
+      border-radius: 10px;
+    }
+    .deck-card .card-back {}
+    .deck-card .card-front {
+      transform: rotateY(180deg);
+    }
+    .deck-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      padding: 10px;
+      background-color: #fff;
+      display: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    #rechooseButton {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 30px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+      display: none;
+    }
+    #rechooseButton:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <div id="card-container">
-        <div id="card-back" class="card"></div>
-        <div id="card-front" class="card"></div>
+  <h1>オラクルカード</h1>
+  
+  <div class="scroll-wrapper">
+    <div class="card-container" id="cardContainer">
+      <div class="deck-card" data-index="0" style="left: 0px;">
+        <div class="card-face card-back"><img src="back1.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
+      <div class="deck-card" data-index="1" style="left: 0px;">
+        <div class="card-face card-back"><img src="back2.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
+      <div class="deck-card" data-index="2" style="left: 0px;">
+        <div class="card-face card-back"><img src="back3.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
+      <div class="deck-card" data-index="3" style="left: 0px;">
+        <div class="card-face card-back"><img src="back4.jpg" alt="カード裏面"></div>
+        <div class="card-face card-front"><img src="" alt="カード表面"></div>
+      </div>
     </div>
-    <div id="buttons">
-        <button id="pick-button">1枚カードを選ぶ</button>
-        <button id="shuffle-button" style="display: none;">再シャッフル</button>
-    </div>
-    <script>
-        let isFlipped = false;
-        const cardContainer = document.getElementById("card-container");
-        const cardBack = document.getElementById("card-back");
-        const cardFront = document.getElementById("card-front");
-        const shuffleButton = document.getElementById("shuffle-button");
-        const pickButton = document.getElementById("pick-button");
+  </div>
+  
+  <div id="cardMessage" class="message"></div>
+  
+  <button id="rechooseButton">再シャッフル</button>
+  <button id="chooseButton">1枚カードを選ぶ</button>
 
-        pickButton.addEventListener("click", () => {
-            if (!isFlipped) {
-                flipCard();
-                pickButton.style.display = "none";
-                shuffleButton.style.display = "inline-block";
-            }
+  <script>
+    const cards = {
+      "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
+      "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
+      "star.jpg": "願いが叶う時。ポジティブなエネルギーがあなたを包みます。",
+      "tower.jpg": "変化の時。過去を手放し、新たな道へ進みましょう。"
+    };
+
+    function spreadDeck() {
+      const deckCards = document.querySelectorAll('.deck-card');
+      let spacing = window.innerWidth < 600 ? 80 : 200;
+      deckCards.forEach((card, index) => {
+        card.style.left = spacing * index + "px";
+      });
+    }
+
+    window.onload = function() {
+      document.getElementById("cardContainer").style.display = "block";
+      setTimeout(spreadDeck, 1000);
+    };
+
+    document.getElementById("chooseButton").addEventListener("click", resetDeck);
+
+    document.querySelectorAll('.deck-card').forEach(card => {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.deck-card').forEach(c => c.style.pointerEvents = "none");
+
+        const cardKeys = Object.keys(cards);
+        const randomFront = cardKeys[Math.floor(Math.random() * cardKeys.length)];
+        this.querySelector('.card-front img').src = randomFront;
+
+        let targetLeft = window.innerWidth < 600 ? "170px" : "270px";
+        let targetTop = window.innerWidth < 600 ? "55px" : "30px";
+
+        this.style.transition = "transform 0.6s ease, left 0.6s ease, top 0.6s ease";
+        this.style.transform = "rotateY(180deg) scale(1.3)";
+        this.style.left = targetLeft;
+        this.style.top = targetTop;
+        this.style.zIndex = "999";
+
+        document.querySelectorAll('.deck-card').forEach(c => {
+          if (c !== this) {
+            c.style.transform = "scale(0.5)";
+            c.style.opacity = "0";
+          }
         });
 
-        shuffleButton.addEventListener("click", () => {
-            isFlipped = false;
-            cardContainer.classList.remove("flipped");
-            pickButton.style.display = "inline-block";
-            shuffleButton.style.display = "none";
-            setTimeout(() => {
-                cardFront.style.backgroundImage = `url('card${Math.floor(Math.random() * 44) + 1}.jpg')`;
-            }, 500);
-        });
+        setTimeout(() => {
+          document.getElementById("cardMessage").textContent = cards[randomFront];
+          document.getElementById("cardMessage").style.display = "block";
+          document.getElementById("rechooseButton").style.display = "inline-block";
+        }, 600);
+      });
+    });
 
-        function flipCard() {
-            isFlipped = true;
-            cardContainer.classList.add("flipped");
-        }
-    </script>
+    function resetDeck() {
+      document.getElementById("cardMessage").style.display = "none";
+      document.getElementById("rechooseButton").style.display = "none";
+      document.getElementById("chooseButton").style.display = "inline-block";
+      spreadDeck();
+    }
+
+    document.getElementById("rechooseButton").addEventListener("click", resetDeck);
+  </script>
 </body>
 </html>
