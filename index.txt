@@ -4,105 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>オラクルカード</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f8f8f8;
-        }
-        h1 {
-            margin-top: 20px;
-        }
-        .card-container {
-            width: 300px;
-            height: 400px;
-            margin: 20px auto;
-            position: relative;
-            perspective: 1000px; /* 3D効果 */
-        }
-        .card {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            backface-visibility: hidden;
-            transition: transform 0.8s ease-in-out;
-        }
-        .card img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .message {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            padding: 10px;
-            background-color: #fff;
-            display: inline-block;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            display: none; /* 最初は非表示 */
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <meta name="description" content="シンプルなオラクルカードのデモページです。">
+    <meta property="og:title" content="オラクルカード">
+    <meta property="og:description" content="シンプルなオラクルカードのデモページです。">
+    <meta property="og:url" content="[ここにあなたのGitHub PagesのURL]">
+    <meta property="og:image" content="[ここにプレビューに表示したい画像のURL]">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <h1>オラクルカード</h1>
 
-    <div class="card-container">
-        <div class="card" id="card">
-            <img id="cardImage" src="back.jpg" alt="カードの裏面">
+    <div id="cardContainer">
+        <div class="card-wrapper" onclick="selectCard(this)" data-message="あなたのメッセージ1">
+            <div class="card deck-card">
+                <div class="card-back"><img src="back1.jpg" alt="カード裏面"></div>
+                <div class="card-front"><img src="card1.jpg" alt="カード表面"></div>
+            </div>
+        </div>
+        <div class="card-wrapper" onclick="selectCard(this)" data-message="あなたのメッセージ2">
+            <div class="card deck-card">
+                <div class="card-back"><img src="back2.jpg" alt="カード裏面"></div>
+                <div class="card-front"><img src="card2.jpg" alt="カード表面"></div>
+            </div>
+        </div>
+        <div class="card-wrapper" onclick="selectCard(this)" data-message="あなたのメッセージ3">
+            <div class="card deck-card">
+                <div class="card-back"><img src="back3.jpg" alt="カード裏面"></div>
+                <div class="card-front"><img src="card3.jpg" alt="カード表面"></div>
+            </div>
+        </div>
+        <div class="card-wrapper" onclick="selectCard(this)" data-message="あなたのメッセージ4">
+            <div class="card deck-card">
+                <div class="card-back"><img src="back4.jpg" alt="カード裏面"></div>
+                <div class="card-front"><img src="card4.jpg" alt="カード表面"></div>
+            </div>
         </div>
     </div>
 
-    <div id="cardMessage" class="message"></div>
+    <div id="messageContainer">
+        <p id="cardMessage"></p>
+        <button id="rechooseButton" onclick="resetDeck()" style="display: none;">再シャッフル</button>
+    </div>
 
-    <button onclick="shuffleCard()">シャッフル</button>
-
-    <script>
-        // 画像リストとメッセージ
-        const cards = {
-            "sun.jpg": "希望と光の象徴。あなたの未来は明るい！",
-            "moon.jpg": "直感を信じてください。答えはあなたの中にあります。",
-            "star.jpg": "願いが叶う時。ポジティブなエネルギーを受け取って！",
-            "tower.jpg": "大きな変化が訪れるかもしれませんが、それは新しい始まりです！"
-        };
-
-        function shuffleCard() {
-            const keys = Object.keys(cards);
-            const randomIndex = Math.floor(Math.random() * keys.length);
-            const selectedCard = keys[randomIndex];
-
-            const card = document.getElementById("card");
-            const cardImage = document.getElementById("cardImage");
-
-            // カードを回転
-            card.style.transform = "rotateY(180deg)";
-
-            // 少し遅れて画像を変更（アニメーションを自然に見せるため）
-            setTimeout(() => {
-                cardImage.src = selectedCard;
-                document.getElementById("cardMessage").textContent = cards[selectedCard];
-                document.getElementById("cardMessage").style.display = "block"; // メッセージを表示
-            }, 400); // 0.4秒後に画像変更（回転の途中）
-        }
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
