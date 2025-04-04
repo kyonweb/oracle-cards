@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>オラクルカード</title>
-    <meta name="description" content="シンプルなオラクルカードのデモページです。">
-    <meta property="og:title" content="オラクルカード">
-    <meta property="og:description" content="シンプルなオラクルカードのデモページです。">
-    <meta property="og:url" content="[ここにあなたのGitHub PagesのURL]">
-    <meta property="og:image" content="[ここにプレビューに表示したい画像のURL]">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
